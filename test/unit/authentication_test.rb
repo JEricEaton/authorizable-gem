@@ -5,16 +5,9 @@ module Authorizable
   # Create a Rails Controller in place, to minimize test dependencies
   class ExampleController < ActionController::Base
     include Authorizable::Authentication
+    
+    # Override these methods to get rid of "NoMethodError: undefined method `cookie_jar' for nil:NilClass"
     attr_accessor :cookies, :params
-    
-    # Override cookies method to get rid of "NoMethodError: undefined method `cookie_jar' for nil:NilClass"
-    def cookies
-      @cookies || {}
-    end
-    
-    def params
-      @params || {}
-    end
   end
   
   class AuthenticationTest < ActiveSupport::TestCase
@@ -24,6 +17,7 @@ module Authorizable
     
     def setup
       @subject = ExampleController.new
+      @subject.cookies = @subject.params = {}
     end
     
     test "instance responds to current_user" do
@@ -39,6 +33,11 @@ module Authorizable
     end
     
     test "admin_route?" do
+      @subject.params = { controller: 'admin/users' }
+      assert @subject.admin_route?
+    end
+    
+    test "unless the admin word is suffixed with slash it's not considered an admin router" do
       @subject.params = { controller: 'admin/users' }
       assert @subject.admin_route?
     end
