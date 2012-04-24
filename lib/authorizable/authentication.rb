@@ -8,7 +8,9 @@ module Authorizable
     included do
       prepend_before_filter :require_autorization
       helper_method :current_user, :admin_route?
-      hide_action :current_user, :admin_route?
+      hide_action :current_user, :admin_route?, :render_unauthorized
+      
+      rescue_from Authorizable::UnathorizedAccessError, :with => :render_unauthorized
     end
   
     module ClassMethods
@@ -85,5 +87,8 @@ module Authorizable
       params[:controller].index('admin/') == 0
     end
     
+    def render_unauthorized
+      render 'unauthorized', layout: false, status: :unauthorized
+    end
   end
 end
