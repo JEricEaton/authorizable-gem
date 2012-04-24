@@ -5,10 +5,15 @@ module Authorizable
   # Create a Rails Controller in place, to minimize test dependencies
   class ExampleController < ActionController::Base
     include Authorizable::Authentication
+    attr_accessor :cookies, :params
     
     # Override cookies method to get rid of "NoMethodError: undefined method `cookie_jar' for nil:NilClass"
     def cookies
-      {}
+      @cookies || {}
+    end
+    
+    def params
+      @params || {}
     end
   end
   
@@ -31,6 +36,11 @@ module Authorizable
     
     test "by default current_user returns nil" do
       assert_nil @subject.current_user
+    end
+    
+    test "admin_route?" do
+      @subject.params = { controller: 'admin/users' }
+      assert @subject.admin_route?
     end
   end
 end
