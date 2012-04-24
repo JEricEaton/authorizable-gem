@@ -12,7 +12,7 @@ development:
   adapter: mysql2
   encoding: utf8
   reconnect: false
-  database: dummy_development
+  database: authorizable_dummy
   pool: 5
   username: root
   password:
@@ -25,7 +25,7 @@ test:
   adapter: mysql2
   encoding: utf8
   reconnect: false
-  database: dummy_test
+  database: authorizable_dummy_test
   pool: 5
   username: root
   password:
