@@ -1,4 +1,2 @@
 require "authorizable/engine"
-
-module Authorizable
-end
+require "authorizable/authentication"

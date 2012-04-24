@@ -1,0 +1,92 @@
+# Usage: Include Authorizable::Authentication in your ApplicationController
+module Authorizable
+  module Authentication
+    extend ActiveSupport::Concern
+  
+    included do
+      prepend_before_filter :require_autorization
+      helper_method :current_user, :admin_route?
+      hide_action :current_user, :admin_route?
+    end
+  
+    module ClassMethods
+      def public_resources
+        yield
+      end
+    
+      def allow(contoller_with_actions)
+        Resources.allow contoller_with_actions
+      end
+    end
+  
+    module Resources
+      extend self
+    
+      @resources = {}
+    
+      def get
+        @resources
+      end
+
+      def allow(contoller_with_actions)
+        if contoller_with_actions.is_a?(String)
+          @resources[contoller_with_actions] = :all
+        else
+          @resources = @resources.merge contoller_with_actions
+        end
+      end
+    end
+  
+    def current_user
+      if cookies[:auth_token].present?
+        @current_user ||= User.find_by_auth_token(cookies[:auth_token]) 
+      end
+      @current_user
+    end
+
+    def require_autorization
+      unathorized! unless authorized?
+    end
+
+    def unathorized!
+      raise UnathorizedAccessError
+    end
+
+    def authorized?
+      if current_user.try(:admin?) # Admin can access everything
+        true 
+      elsif current_user.nil? and guest_can?
+        true
+      elsif current_user and !admin_route?
+        true
+      else
+        false
+      end
+    end
+
+    # Can unautrorized user access the current controller#action?
+    # :root is allowed by default
+    def guest_can?
+      public_resources = Resources.get
+      if request.path == root_path
+        true
+      elsif public_resources[params[:controller]] && public_resources[params[:controller]] == :all
+        true
+      elsif public_resources[params[:controller]] && public_resources[params[:controller]].include?(params[:action])
+        true
+      else
+        false
+      end
+    end
+
+    def admin_route?
+      if params[:controller].index('admin') == 0
+        true
+      else
+        false
+      end
+    end
+  
+    class UnathorizedAccessError < StandardError; end
+  end
+end
