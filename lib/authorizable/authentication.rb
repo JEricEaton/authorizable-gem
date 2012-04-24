@@ -6,6 +6,10 @@ module Authorizable
     ROOT_PATH = '/'
   
     included do
+      if Authorizable.configuration.nil?
+        raise "Authorizable has not been configured!"
+      end
+      
       prepend_before_filter :require_autorization
       helper_method :current_user, :admin_route?
       hide_action :current_user, :admin_route?, :render_unauthorized
@@ -88,7 +92,7 @@ module Authorizable
     end
     
     def render_unauthorized
-      render 'unauthorized', layout: false, status: :unauthorized
+      render Authorizable.configuration.unauthorized_template, layout: false, status: :unauthorized
     end
   end
 end
