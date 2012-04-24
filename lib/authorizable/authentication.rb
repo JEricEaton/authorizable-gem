@@ -2,6 +2,8 @@
 module Authorizable
   module Authentication
     extend ActiveSupport::Concern
+    
+    ROOT_PATH = '/'
   
     included do
       prepend_before_filter :require_autorization
@@ -68,7 +70,7 @@ module Authorizable
     # :root is allowed by default
     def guest_can?
       public_resources = Resources.get
-      if request.path == root_path
+      if request.path == ROOT_PATH
         true
       elsif public_resources[params[:controller]] && public_resources[params[:controller]] == :all
         true
@@ -86,7 +88,6 @@ module Authorizable
         false
       end
     end
-  
-    class UnathorizedAccessError < StandardError; end
+    
   end
 end

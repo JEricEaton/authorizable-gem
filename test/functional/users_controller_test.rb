@@ -10,7 +10,9 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test "edit is not publicly accessible" do
-    get :edit, id: users(:robert)
-    assert_response :unauthorized
+    assert_raise Authorizable::UnathorizedAccessError do
+      get :edit, id: users(:robert)
+    end
+    # assert_response :unauthorized
   end
 end
