@@ -82,11 +82,7 @@ module Authorizable
     end
 
     def admin_route?
-      if params[:controller].index('admin') == 0
-        true
-      else
-        false
-      end
+      params[:controller].index('admin/') == 0
     end
     
   end

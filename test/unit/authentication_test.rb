@@ -38,8 +38,8 @@ module Authorizable
     end
     
     test "unless the admin word is suffixed with slash it's not considered an admin router" do
-      @subject.params = { controller: 'admin/users' }
-      assert @subject.admin_route?
+      @subject.params = { controller: 'admin_users' }
+      assert !@subject.admin_route?
     end
   end
 end
