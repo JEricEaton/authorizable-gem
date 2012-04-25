@@ -7,17 +7,16 @@ require "authorizable/version"
 Gem::Specification.new do |s|
   s.name        = "authorizable"
   s.version     = Authorizable::VERSION
-  s.authors     = ["TODO: Your name"]
-  s.email       = ["TODO: Your email"]
-  s.homepage    = "TODO"
-  s.summary     = "TODO: Summary of Authorizable."
-  s.description = "TODO: Description of Authorizable."
+  s.authors     = ["Robert Starsi"]
+  s.email       = ["klevo@klevo.sk"]
+  s.homepage    = "http://desteni.org"
+  s.summary     = "Simple authorization, sign in/out."
+  s.description = "Simple authorization, sign in/out."
 
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["test/**/*"]
 
   s.add_dependency "rails", "~> 3.2.3"
-  # s.add_dependency "jquery-rails"
-
+  s.add_dependency "bcrypt-ruby", "~> 3.0.0"
   s.add_development_dependency "mysql2"
 end
