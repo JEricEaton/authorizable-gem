@@ -1,5 +1,7 @@
 module Authorizable
   class SessionsController < ApplicationController
+    unloadable
+    
     skip_before_filter :require_authentication, :only => [:new, :create]
     
     # Sign in screen
