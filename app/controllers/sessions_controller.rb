@@ -11,7 +11,7 @@ class SessionsController < ApplicationController
     user = Authorizable.configuration.user_model.find_by_email(session_params[:email])
     if user.try(:authenticate, session_params[:password])
       user.regenerate_auth_token
-      if params[:remember_me]  
+      if session_params[:remember_me].to_i
         cookies.permanent[:auth_token] = user.auth_token
       else  
         cookies[:auth_token] = user.auth_token
@@ -31,6 +31,6 @@ class SessionsController < ApplicationController
   
   private
     def session_params
-      params[:session].slice(:email, :password)
+      params[:session].slice(:email, :password, :remember_me)
     end
 end
