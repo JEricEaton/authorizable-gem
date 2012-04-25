@@ -15,10 +15,11 @@ module Authorizable
         else  
           cookies[:auth_token] = user.auth_token
         end
-        redirect_to redirect_to_after_sign_in and return
+        redirect_to redirect_to_after_sign_in
+      else
+        flash.now.alert = "Invalid email or password."
+        render "new"
       end
-      flash.now.alert = "Invalid email or password."
-      render "new"
     end
 
     def destroy
