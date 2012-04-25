@@ -20,6 +20,8 @@ module Authorizable
     test "succesful sign in with email and password" do
       post :create, session: { email: 'klevo@klevo.sk', password: 'antonio' }
       assert_redirected_to '/users/' + users(:robert).to_param # Defined in dummy's ApplicationController#redirect_to_after_sign_in
+      
+      assert_not_equal users(:robert).auth_token, "RobertsAuthToken", 'auth_token has been regenerated'
     end
   end
 end
