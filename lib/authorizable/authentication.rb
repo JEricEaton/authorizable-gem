@@ -23,25 +23,7 @@ module Authorizable
       end
     
       def allow(contoller_with_actions)
-        Resources.allow contoller_with_actions
-      end
-    end
-  
-    module Resources
-      extend self
-    
-      @resources = {}
-    
-      def get
-        @resources
-      end
-
-      def allow(contoller_with_actions)
-        if contoller_with_actions.is_a?(String)
-          @resources[contoller_with_actions] = :all
-        else
-          @resources = @resources.merge contoller_with_actions
-        end
+        Authorizable.configuration.add_public_resource contoller_with_actions
       end
     end
   
@@ -75,7 +57,7 @@ module Authorizable
     # Can unautrorized user access the current controller#action?
     # :root is allowed by default
     def guest_can?
-      public_resources = Resources.get
+      public_resources = Authorizable.configuration.public_resources
       if request.path == ROOT_PATH
         true
       elsif public_resources[params[:controller]] && public_resources[params[:controller]] == :all

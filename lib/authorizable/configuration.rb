@@ -1,15 +1,25 @@
 module Authorizable
   class Configuration
-    attr_accessor :mailer_sender, :cookie_expiration, :password_strategy, :user_model, :unauthorized_template
+    attr_accessor :mailer_sender, :cookie_expiration, :password_strategy, :user_model, 
+                  :unauthorized_template, :public_resources
 
     def initialize
       @mailer_sender     = 'donotreply@example.com'
       @cookie_expiration = lambda { 1.year.from_now.utc }
       @unauthorized_template = 'unauthorized'
+      @public_resources = {}
     end
 
     def user_model
       @user_model || ::User
+    end
+    
+    def add_public_resource(contoller_with_actions)
+      if contoller_with_actions.is_a?(String)
+        public_resources[contoller_with_actions] = :all
+      else
+        public_resources.merge! contoller_with_actions
+      end
     end
   end
 
