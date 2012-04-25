@@ -1,4 +1,4 @@
-Authorizable::Engine.routes.draw do
+Rails.application.routes.draw do
   resource :sessions,
     :controller => 'authorizable/sessions',
     :only       => [:new, :create, :destroy]
