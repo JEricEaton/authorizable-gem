@@ -23,5 +23,12 @@ module Authorizable
       
       assert_not_equal users(:robert).auth_token, "RobertsAuthToken", 'auth_token has been regenerated'
     end
+    
+    test "sign out - resets auth_token field and removes cookie" do
+      @request.cookies[:auth_token] = 'RobertsAuthToken'
+      delete :destroy
+      assert_equal users(:robert).auth_token, '', 'auth_token has been emptied'
+      assert_equal "auth_token=; path=/; expires=Thu, 01-Jan-1970 00:00:00 GMT", @response.header['Set-Cookie'], 'Remember me cookie gets deleted'
+    end
   end
 end
