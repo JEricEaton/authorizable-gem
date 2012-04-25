@@ -4,6 +4,7 @@ module Authorizable
     extend ActiveSupport::Concern
     
     ROOT_PATH = '/'
+    REMEMBER_ME_COOKIE_NAME = :auth_token
   
     included do
       if Authorizable.configuration.nil?
@@ -28,8 +29,8 @@ module Authorizable
     end
   
     def current_user
-      if cookies[:auth_token].present?
-        @current_user ||= User.find_by_auth_token(cookies[:auth_token]) 
+      if cookies[REMEMBER_ME_COOKIE_NAME].present?
+        @current_user ||= User.find_by_auth_token(cookies[REMEMBER_ME_COOKIE_NAME]) 
       end
       @current_user
     end
