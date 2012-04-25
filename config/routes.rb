@@ -1,5 +1,5 @@
 Authorizable::Engine.routes.draw do
-  resource :session,
+  resource :sessions,
     :controller => 'authorizable/sessions',
     :only       => [:new, :create, :destroy]
 
