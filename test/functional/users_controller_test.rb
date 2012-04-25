@@ -37,4 +37,12 @@ class UsersControllerTest < ActionController::TestCase
     assert_nil @controller.current_user
     assert_nil assigns(:current_user)
   end
+  
+  test "remember me cookie carrying the auth_token present in the database authorizes the corresponding user" do
+    @request.cookies[:auth_token] = 'RobertsAuthToken'
+    get :edit, id: users(:robert)
+    assert_response :success
+    assert @controller.current_user
+    assert assigns(:current_user)
+  end
 end

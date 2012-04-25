@@ -30,7 +30,7 @@ module Authorizable
   
     def current_user
       if cookies[REMEMBER_ME_COOKIE_NAME].present? && !cookies[REMEMBER_ME_COOKIE_NAME].blank?
-        @current_user ||= User.find_by_auth_token(cookies[REMEMBER_ME_COOKIE_NAME]) 
+        @current_user ||= Authorizable.configuration.user_model.find_by_auth_token(cookies[REMEMBER_ME_COOKIE_NAME]) 
       end
       @current_user
     end
@@ -44,7 +44,7 @@ module Authorizable
     end
 
     def authorized?
-      if current_user.try(:admin?) # Admin can access everything
+      if current_user.respond_to?(:admin?) && current_user.admin? # Admin can access everything
         true 
       elsif current_user.nil? and guest_can?
         true
