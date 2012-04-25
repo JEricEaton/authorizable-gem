@@ -1,9 +1,5 @@
 require 'test_helper'
 
-class ::User
-  include Authorizable::User
-end
-
 class SessionsControllerTest < ActionController::TestCase
   fixtures :users
   

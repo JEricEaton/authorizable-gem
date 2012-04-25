@@ -2,10 +2,6 @@
 require 'test_helper'
 
 module Authorizable
-  class ::User
-    include Authorizable::User
-  end
-  
   class UserTest < ActiveSupport::TestCase
     fixtures :users
     

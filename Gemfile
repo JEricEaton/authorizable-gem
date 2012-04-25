@@ -17,7 +17,10 @@ gem "jquery-rails"
 # gem 'ruby-debug19', :require => 'ruby-debug'
 
 # Pry as debugger
-gem 'pry', require: "pry"
+gem 'pry'
+
+# Capybara for integration testing
+gem 'capybara'
 
 # For hashing passwords
 gem 'bcrypt-ruby', '~> 3.0.0'
