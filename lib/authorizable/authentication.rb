@@ -11,7 +11,7 @@ module Authorizable
         raise "Authorizable has not been configured!"
       end
       
-      prepend_before_filter :require_autorization
+      prepend_before_filter :require_authentication
       helper_method :current_user, :admin_route?
       hide_action :current_user, :admin_route?, :render_unauthorized
       
@@ -34,8 +34,12 @@ module Authorizable
       end
       @current_user
     end
+    
+    def redirect_to_after_sign_in
+      ROOT_PATH
+    end
 
-    def require_autorization
+    def require_authentication
       unathorized! unless authorized?
     end
 
