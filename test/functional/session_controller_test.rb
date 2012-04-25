@@ -30,6 +30,7 @@ module Authorizable
       post :create, session: { email: 'klevo@klevo.sk', password: 'invalid' }
       assert_response :success
       assert_equal @robert.auth_token, "RobertsAuthToken", 'auth_token has not been regenerated'
+      assert_match /invalid/, flash[:alert]
     end
     
     test "sign out - resets auth_token field and removes cookie" do
