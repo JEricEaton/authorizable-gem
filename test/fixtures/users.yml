@@ -2,7 +2,7 @@ robert:
   first_name: Robert
   last_name: Starsi
   email: klevo@klevo.sk
-  password_digest: MyString
+  password_digest: $2a$10$KXmN2Kad5jKuGqfai8UFJuz3lYPj.NRKy9zZX9H5Jd/ncrVLaDIGy # antonio
   auth_token: RobertsAuthToken
   reset_password_token: 
   password_reset_sent_at: 
@@ -11,7 +11,7 @@ andrea:
   first_name: Andrea
   last_name: Rossouw
   email: andrea@desteni.co.za
-  password_digest: MyString
+  password_digest: $2a$10$KXmN2Kad5jKuGqfai8UFJuz3lYPj.NRKy9zZX9H5Jd/ncrVLaDIGy # antonio
   auth_token:
   reset_password_token: 
   password_reset_sent_at:

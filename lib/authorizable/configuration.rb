@@ -1,7 +1,7 @@
 module Authorizable
   class Configuration
     attr_accessor :mailer_sender, :cookie_expiration, :password_strategy, :user_model, 
-                  :unauthorized_template, :public_resources
+                  :unauthorized_template, :public_resources, :password_salt
 
     def initialize
       @mailer_sender     = 'donotreply@example.com'

@@ -16,7 +16,7 @@ module Authorizable
         target_path = wiki_root_path
         redirect_to target_path and return
       end
-      flash.now.alert = "Invalid email or password"
+      flash.now.alert = "Invalid email or password."
       render "new"
     end
 

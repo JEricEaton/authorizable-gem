@@ -1,3 +1,5 @@
+require 'bcrypt'
+
 # Usage: Include Authorizable::User in your User model
 module Authorizable
   module User
@@ -11,6 +13,12 @@ module Authorizable
 
     end
   
+    def authenticate(password)
+      password_digest == digest_password(password)
+    end
     
+    def digest_password(password)
+      BCrypt::Engine.hash_secret(password, Authorizable.configuration.password_salt) 
+    end
   end
 end

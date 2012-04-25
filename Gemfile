@@ -19,3 +19,6 @@ gem "jquery-rails"
 # Pry as debugger
 gem 'pry', require: "pry"
 
+# For hashing passwords
+gem 'bcrypt-ruby', '~> 3.0.0'
+
