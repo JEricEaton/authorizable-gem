@@ -1,0 +1,27 @@
+<div class="sign_in_container">
+  <%= form_tag authorizable_sessions_path do %>
+    <div class="input">
+      <%= label_tag :email %>
+      <%= text_field_tag :email, params[:email], autofocus: 'autofocus' %>
+    </div>
+
+    <div class="input">
+      <%= label_tag :password %>
+      <%= password_field_tag :password %>
+    </div>
+
+    <div class="checkbox">
+      <%= check_box_tag :remember_me, 1, params[:remember_me] %>
+      <%= label_tag :remember_me, 'Keep me signed in on this computer' %>  
+    </div>
+
+    <div class="submit">
+      <%= submit_tag "Sign in", class: 'btn btn-primary' %>
+    </div>
+    
+    <div class="help">
+      Help: <%= link_to 'I forgot my password', '#TODO' %>
+    </div>
+  <% end %>
+</div>
+
