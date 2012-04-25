@@ -5,11 +5,11 @@ module Authorizable
 
     def create
       reset_session # session fixation attack mitigation
-      user = User.find_by_email(params[:email])
+      user = Authorizable.configuration.user_model.find_by_email(params[:email])
       if user.try(:authenticate, params[:password])
         user.regenerate_auth_token
         if params[:remember_me]  
-          cookies.permanent[:auth_token] = user.auth_token  
+          cookies.permanent[:auth_token] = user.auth_token
         else  
           cookies[:auth_token] = user.auth_token
         end
@@ -22,8 +22,8 @@ module Authorizable
 
     def destroy
       cookies.delete(:auth_token)
-      @current_user.regenerate_auth_token
-      redirect_to signin_path, :notice => "You've signed out"
+      current_user.update_attribute :auth_token, ''
+      redirect_to sign_in_path, :notice => "You've signed out."
     end
   end
 end

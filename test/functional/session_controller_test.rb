@@ -7,4 +7,9 @@ class Authorizable::SessionsControllerTest < ActionController::TestCase
     get :new
     assert_response :success
   end
+  
+  # test "succesful sign in" do
+  #   post :create, session: { email: 'klevo@klevo.sk', password: 'antonio' }
+  #   
+  # end
 end
