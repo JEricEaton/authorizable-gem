@@ -29,7 +29,7 @@ module Authorizable
     end
   
     def current_user
-      if cookies[REMEMBER_ME_COOKIE_NAME].present?
+      if cookies[REMEMBER_ME_COOKIE_NAME].present? && !cookies[REMEMBER_ME_COOKIE_NAME].blank?
         @current_user ||= User.find_by_auth_token(cookies[REMEMBER_ME_COOKIE_NAME]) 
       end
       @current_user

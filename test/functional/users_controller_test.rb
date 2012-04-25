@@ -21,4 +21,20 @@ class UsersControllerTest < ActionController::TestCase
     assert_response :unauthorized
     assert_select 'h1', "You're not allowed here dude!"
   end
+  
+  test "blank remember me cookie does not authorize anyone" do
+    @request.cookies[:auth_token] = ''
+    get :edit, id: users(:robert)
+    assert_response :unauthorized
+    assert_nil @controller.current_user
+    assert_nil assigns(:current_user)
+  end
+  
+  test "spaces filled remember me cookie does not authorize anyone" do
+    @request.cookies[:auth_token] = '   '
+    get :edit, id: users(:robert)
+    assert_response :unauthorized
+    assert_nil @controller.current_user
+    assert_nil assigns(:current_user)
+  end
 end

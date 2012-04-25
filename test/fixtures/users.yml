@@ -6,3 +6,12 @@ robert:
   auth_token: RobertsAuthToken
   reset_password_token: 
   password_reset_sent_at: 
+    
+andrea:
+  first_name: Andrea
+  last_name: Rossouw
+  email: andrea@desteni.co.za
+  password_digest: MyString
+  auth_token:
+  reset_password_token: 
+  password_reset_sent_at:
