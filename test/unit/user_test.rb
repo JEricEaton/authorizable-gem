@@ -2,7 +2,8 @@
 require 'test_helper'
 
 module Authorizable
-  class Tester < ActionController::Base
+  class Tester < ActiveRecord::Base
+    self.table_name = 'users'
     include Authorizable::User
   end
   
@@ -14,6 +15,9 @@ module Authorizable
     def setup
       @subject = Tester.new
     end
-
+    
+    test "something interesting" do
+      
+    end
   end
 end
