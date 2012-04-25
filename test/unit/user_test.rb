@@ -10,7 +10,7 @@ module Authorizable
     fixtures :users
     
     def setup
-      Authorizable.configuration.password_salt = "$2a$10$KXmN2Kad5jKuGqfai8UFJu"
+      Authorizable.configuration.password_salt = "$2a$10$fREDiaGGPkyyXBNXM/Ae/O"
     end
     
     test "module" do
@@ -20,6 +20,9 @@ module Authorizable
     test "can be authenticated using password matching password_digest in database" do
       robert = users(:robert)
       assert robert.authenticate('antonio')
+      
+      andrea = users(:andrea)
+      assert andrea.authenticate('andrea')
     end
     
     test "can NOT be authenticated using password NOT matching password_digest in database" do
