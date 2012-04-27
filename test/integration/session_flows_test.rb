@@ -31,7 +31,7 @@ class SessionFlowsTest < ActionDispatch::IntegrationTest
     click_on 'I forgot my password'
     assert_equal new_password_reset_url, current_url
     
-    fill_in 'Email', :with => 'klevo@klevo.sk'
+    fill_in 'email', :with => 'klevo@klevo.sk'
     click_button 'Send me password reset instructions'
     
     assert_equal 1, ActionMailer::Base.deliveries.count
