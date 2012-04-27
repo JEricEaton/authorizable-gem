@@ -6,7 +6,8 @@ module Authorizable
     extend ActiveSupport::Concern
   
     included do
-      attr_accessor :force_password_validation
+      attr_accessor :password, :current_password, :force_password_validation
+      attr_accessible :password, :current_password, :password_confirmation
       
       validates :email, 
         presence: true, 
@@ -43,6 +44,12 @@ module Authorizable
       begin  
         self[column] = SecureRandom.urlsafe_base64(length)
       end while Authorizable.configuration.user_model.exists?(column => self[column])
+    end
+    
+    def create_password_reset_token  
+      generate_token :reset_password_token, 10
+      self.password_reset_sent_at = Time.now
+      save!
     end
   end
 end

@@ -8,6 +8,7 @@
 
 Rails.application.routes.draw do
   resource :sessions, :only => [:new, :create, :destroy]
+  resource :password_resets
 
   # match 'sign_up'  => 'users#new', :as => 'sign_up'
   match 'sign_in'  => 'sessions#new', :as => 'sign_in'

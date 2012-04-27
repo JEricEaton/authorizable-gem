@@ -1,0 +1,17 @@
+<h1 style="margin-top: 30px;">Reset Your Password</h1>
+
+<p>Type in a new password you want to use to sign in.</p>
+
+<%= form_for @user, { :url => edit_password_resets_path(params[:id]), class: 'horizontal' } do |f| %>  
+  <%= render 'form_errors', record: @user %>
+  
+  <div class="input">  
+    <%= f.label :password, 'New password' %>  
+    <%= f.password_field :password, { autofocus: 'autofocus' } %>  
+  </div>
+  <div class="input">
+    <%= f.label :password_confirmation, 'Retype password' %>  
+    <%= f.password_field :password_confirmation %>  
+  </div>  
+  <div class="submit"><%= f.submit "Save my new password", class: 'btn btn-primary' %></div>  
+<% end %>
