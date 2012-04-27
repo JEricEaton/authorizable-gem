@@ -3,6 +3,10 @@ require 'test_helper'
 class SessionFlowsTest < ActionDispatch::IntegrationTest
   include Capybara::DSL
   fixtures :users
+
+  def teardown
+    ActionMailer::Base.deliveries = []  
+  end
   
   test "sign in, sign out" do
     # Sign in
@@ -22,5 +26,13 @@ class SessionFlowsTest < ActionDispatch::IntegrationTest
     visit '/sign_in'
     click_on 'I forgot my password'
     assert_equal new_password_reset_url, current_url
+    
+    fill_in 'Email', :with => 'klevo@klevo.sk'
+    click_button 'Send me password reset instructions'
+    
+    assert_equal 1, ActionMailer::Base.deliveries.count
+    email = ActionMailer::Base.deliveries.first
+    assert_equal [users(:robert).email], email.to
+    assert_match /Reset Instructions/, email.subject
   end
 end
