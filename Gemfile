@@ -25,3 +25,5 @@ gem 'capybara'
 # For hashing passwords
 gem 'bcrypt-ruby', '~> 3.0.0'
 
+gem 'timecop'
+

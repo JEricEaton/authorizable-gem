@@ -17,4 +17,10 @@ class SessionFlowsTest < ActionDispatch::IntegrationTest
     click_on 'Sign out'
     assert_equal sign_in_url, current_url
   end
+  
+  test "reset forgotten password" do
+    visit '/sign_in'
+    click_on 'I forgot my password'
+    assert_equal new_password_reset_url, current_url
+  end
 end
