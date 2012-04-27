@@ -3,6 +3,10 @@ require 'test_helper'
 class SessionFlowsTest < ActionDispatch::IntegrationTest
   include Capybara::DSL
   fixtures :users
+  
+  def setup
+    @robert = users(:robert)
+  end
 
   def teardown
     ActionMailer::Base.deliveries = []  
@@ -15,7 +19,7 @@ class SessionFlowsTest < ActionDispatch::IntegrationTest
     fill_in 'Password', :with => 'antonio'
     click_button 'Sign in'
     
-    assert_equal user_url(users(:robert)), current_url
+    assert_equal user_url(@robert), current_url
     
     # Sign out
     click_on 'Sign out'
@@ -32,7 +36,24 @@ class SessionFlowsTest < ActionDispatch::IntegrationTest
     
     assert_equal 1, ActionMailer::Base.deliveries.count
     email = ActionMailer::Base.deliveries.first
-    assert_equal [users(:robert).email], email.to
+    assert_equal [@robert.email], email.to
     assert_match /Reset Instructions/, email.subject
+    
+    reset_path = edit_password_reset_path(@robert.reload.reset_password_token)
+    
+    assert_match /#{reset_path}/, email.body.raw_source
+    
+    # Reset the password
+    visit reset_path
+    fill_in 'New password', :with => 'newpass'
+    fill_in 'New password again', :with => 'newpass'
+    click_button 'Save my new password'
+    
+    # After password reset we land on sign in screen
+    assert_equal sign_in_path, current_path
+    
+    assert_not_equal '$2a$10$fREDiaGGPkyyXBNXM/Ae/OqbgBtlJ0tNqJYGJHgZg.tAvOEpJS.gK', @robert.reload.password_digest, 'Password should have been changed'
+    
+    # Sign in with the new password
   end
 end
