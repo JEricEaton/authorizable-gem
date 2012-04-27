@@ -21,6 +21,8 @@ module Authorizable
       validates :current_password, 
         current_password_matches: true, 
         :if => lambda { current_password.present? }
+        
+      before_save :set_password_digest
     end
   
     module ClassMethods
@@ -50,6 +52,13 @@ module Authorizable
       generate_token :reset_password_token, 10
       self.password_reset_sent_at = Time.now
       save!
+    end
+    
+    def set_password_digest
+      if password.present?
+        self.password_digest = digest_password(password)
+      end
+      true
     end
   end
 end

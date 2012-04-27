@@ -59,7 +59,7 @@ class PasswordResetsControllerTest < ActionController::TestCase
     post :update, user: params, id: 'resetme'
     assert_redirected_to sign_in_path
     user.reload
-    assert_equal '$2a$10$KXmN2Kad5jKuGqfai8UFJuf9a3BcDC7kWMcujWPmo2PXqODg5vJo2', user.password_digest
+    assert_not_equal '$2a$10$fREDiaGGPkyyXBNXM/Ae/OqbgBtlJ0tNqJYGJHgZg.tAvOEpJS.gK', user.password_digest
     Timecop.return
   end
   
@@ -91,7 +91,7 @@ class PasswordResetsControllerTest < ActionController::TestCase
     }
     post :update, user: params, id: 'resetme1'
     user.reload
-    assert_equal '$2a$10$KXmN2Kad5jKuGqfai8UFJuz3lYPj.NRKy9zZX9H5Jd/ncrVLaDIGy', user.password_digest
+    assert_equal '$2a$10$fREDiaGGPkyyXBNXM/Ae/OqbgBtlJ0tNqJYGJHgZg.tAvOEpJS.gK', user.password_digest
     assert_match /confirmation/, assigns(:user).errors[:password].first
     Timecop.return
   end
