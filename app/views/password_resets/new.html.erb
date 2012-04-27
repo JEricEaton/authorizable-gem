@@ -1,7 +1,7 @@
 <div class="new_password_reset" style="width: 400px; margin: 50px auto; text-align: center;">
   <h1>Reset Account Password</h1>
 
-  <%= form_tag password_resets_path, method: :post do %>
+  <%= form_tag password_reset_path, method: :post do %>
     <div class="input">
       <%= label_tag :email %>
       <%= text_field_tag :email, params[:email], autofocus: 'autofocus' %>
