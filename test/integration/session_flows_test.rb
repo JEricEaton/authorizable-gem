@@ -26,7 +26,7 @@ class SessionFlowsTest < ActionDispatch::IntegrationTest
     assert_equal sign_in_url, current_url
   end
   
-  test "reset forgotten password" do
+  test "reset forgotten password, then sign in with the new one" do
     visit '/sign_in'
     click_on 'I forgot my password'
     assert_equal new_password_reset_url, current_url
@@ -52,8 +52,11 @@ class SessionFlowsTest < ActionDispatch::IntegrationTest
     # After password reset we land on sign in screen
     assert_equal sign_in_path, current_path
     
-    assert_not_equal '$2a$10$fREDiaGGPkyyXBNXM/Ae/OqbgBtlJ0tNqJYGJHgZg.tAvOEpJS.gK', @robert.reload.password_digest, 'Password should have been changed'
-    
     # Sign in with the new password
+    fill_in 'Email', :with => 'klevo@klevo.sk'
+    fill_in 'Password', :with => 'newpass'
+    click_button 'Sign in'
+    
+    assert_equal user_url(@robert), current_url
   end
 end
