@@ -25,10 +25,6 @@ module Authorizable
       before_save :set_password_digest
     end
   
-    module ClassMethods
-
-    end
-  
     def authenticate(password)
       password_digest == digest_password(password)
     end
