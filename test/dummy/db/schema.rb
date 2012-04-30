@@ -18,6 +18,7 @@ ActiveRecord::Schema.define(:version => 20120424141046) do
     t.string   "last_name"
     t.string   "email"
     t.string   "password_digest"
+    t.string   "password_salt"
     t.string   "auth_token"
     t.string   "reset_password_token"
     t.datetime "password_reset_sent_at"

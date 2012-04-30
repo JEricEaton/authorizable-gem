@@ -8,6 +8,7 @@ module Authorizable
       @cookie_expiration = lambda { 1.year.from_now.utc }
       @unauthorized_template = 'unauthorized'
       @public_resources = {}
+      @password_strategy = BcryptHashSecretStrategy
     end
 
     def user_model

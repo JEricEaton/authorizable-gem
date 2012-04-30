@@ -34,7 +34,7 @@ module Authorizable
     end
     
     def digest_password(password)
-      BCrypt::Engine.hash_secret(password, Authorizable.configuration.password_salt) 
+      Authorizable.configuration.password_strategy.digest password
     end
     
     def regenerate_auth_token
