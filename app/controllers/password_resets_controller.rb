@@ -38,6 +38,7 @@ class PasswordResetsController < ApplicationController
     
     def set_user
       throw ActiveRecord::RecordNotFound if params[:id].blank?
-      @user = User.find_by_reset_password_token!(params[:id])
+      @user = User.where(Authorizable.configuration.password_reset_token_column_name.to_sym => params[:id]).first
+      raise ActiveRecord::RecordNotFound unless @user
     end
 end

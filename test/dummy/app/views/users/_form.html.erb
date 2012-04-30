@@ -32,8 +32,8 @@
     <%= f.text_field :auth_token %>
   </div>
   <div class="field">
-    <%= f.label :reset_password_token %><br />
-    <%= f.text_field :reset_password_token %>
+    <%= f.label Authorizable.configuration.password_reset_token_column_name.to_sym %><br />
+    <%= f.text_field Authorizable.configuration.password_reset_token_column_name.to_sym %>
   </div>
   <div class="field">
     <%= f.label :password_reset_sent_at %><br />

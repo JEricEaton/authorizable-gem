@@ -45,7 +45,7 @@ module Authorizable
     end
     
     def create_password_reset_token  
-      generate_token :reset_password_token, 10
+      generate_token Authorizable.configuration.password_reset_token_column_name.to_sym, 10
       self.password_reset_sent_at = Time.now
       save!
     end

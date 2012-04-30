@@ -1,7 +1,8 @@
 module Authorizable
   class Configuration
     attr_accessor :mailer_sender, :cookie_expiration, :password_strategy, :user_model, 
-                  :unauthorized_template, :public_resources, :password_salt
+                  :unauthorized_template, :public_resources, :password_salt,
+                  :password_reset_token_column_name
 
     def initialize
       @mailer_sender     = 'donotreply@example.com'
@@ -9,6 +10,7 @@ module Authorizable
       @unauthorized_template = 'unauthorized'
       @public_resources = {}
       @password_strategy = BcryptHashSecretStrategy
+      @password_reset_token_column_name = 'reset_password_token'
     end
 
     def user_model
