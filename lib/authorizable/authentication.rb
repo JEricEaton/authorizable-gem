@@ -13,7 +13,7 @@ module Authorizable
       
       prepend_before_filter :require_authentication
       helper_method :current_user, :admin_route?
-      hide_action :current_user, :admin_route?, :render_unauthorized
+      hide_action :current_user, :admin_route?, :render_unauthorized, :after_sign_in
       
       rescue_from Authorizable::UnathorizedAccessError, :with => :render_unauthorized
     end
