@@ -8,14 +8,15 @@ class SessionsController < ApplicationController
 
   def create
     reset_session # session fixation attack mitigation
-    user = Authorizable.configuration.user_model.find_by_email(session_params[:email])
-    if user.try(:authenticate, session_params[:password])
-      user.regenerate_auth_token
+    @user = Authorizable.configuration.user_model.find_by_email(session_params[:email])
+    if @user.try(:authenticate, session_params[:password])
+      @user.regenerate_auth_token
       if session_params[:remember_me].to_i
-        cookies.permanent[:auth_token] = user.auth_token
+        cookies.permanent[:auth_token] = @user.auth_token
       else  
-        cookies[:auth_token] = user.auth_token
+        cookies[:auth_token] = @user.auth_token
       end
+      after_sign_in if respond_to?(:after_sign_in)
       redirect_to redirect_to_after_sign_in
     else
       flash.now.alert = "Invalid email or password."
