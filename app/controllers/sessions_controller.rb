@@ -16,6 +16,7 @@ class SessionsController < ApplicationController
         render "new" and return
       end
       @user.regenerate_auth_token
+      # :TODO test
       if session_params[:remember_me] == '1'
         cookies.permanent[:auth_token] = @user.auth_token
       else  
