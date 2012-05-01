@@ -38,7 +38,7 @@ module Authorizable
       save! validate: false
     end
 
-    def generate_token(column, length)
+    def generate_token(column, length = 180)
       begin  
         self[column] = SecureRandom.urlsafe_base64(length)
       end while Authorizable.configuration.user_model.exists?(column => self[column])
