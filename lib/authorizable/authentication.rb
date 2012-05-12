@@ -50,9 +50,9 @@ module Authorizable
     def authorized?
       if current_user.respond_to?(:admin?) && current_user.admin? # Admin can access everything
         true 
-      elsif current_user.nil? and guest_can?
+      elsif current_user.nil? && guest_can?
         true
-      elsif current_user and !admin_route?
+      elsif current_user && !admin_route?
         true
       else
         false
