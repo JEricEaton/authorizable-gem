@@ -79,7 +79,7 @@ module Authorizable
     end
     
     def render_unauthorized
-      render Authorizable.configuration.unauthorized_template, layout: false, status: :unauthorized
+      render Authorizable.configuration.unauthorized_template, layout: false, status: :unauthorized, formats: 'html'
     end
   end
 end
