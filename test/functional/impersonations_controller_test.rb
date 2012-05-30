@@ -33,4 +33,12 @@ class ImpersonationsControllerTest < ActionController::TestCase
       post :create, user_id: @robert.id
     end
   end
+  
+  test "stop impersonation" do
+    @request.cookies[:auth_token] = 'RobertsAuthToken' # auth as Robert
+    session[:impersonated_user_id] = @andrea.id
+    post :stop
+    assert_nil session[:impersonated_user_id]
+    assert_equal @robert, @controller.current_user
+  end
 end

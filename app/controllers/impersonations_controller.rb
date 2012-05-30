@@ -11,7 +11,7 @@ class ImpersonationsController < ApplicationController
     end
   end
   
-  def destroy
+  def stop
     raise NonAdminNotAllowedToImpersonateError unless current_user.admin?
     
     session.delete :impersonated_user_id
