@@ -18,6 +18,7 @@ class ImpersonationsControllerTest < ActionController::TestCase
     assert_response :redirect
     assert_redirected_to root_path
     assert_equal @andrea.id, session[:impersonated_user_id]
+    assert_equal @andrea, @controller.current_user
   end
   
   test "anonymous user is not allowed to impersonate" do

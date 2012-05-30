@@ -4,7 +4,7 @@ module Authorizable
     extend ActiveSupport::Concern
     
     ROOT_PATH = '/'
-    REMEMBER_ME_COOKIE_NAME = :auth_token
+    AUTH_COOKIE = :auth_token
   
     included do
       if Authorizable.configuration.nil?
@@ -29,10 +29,24 @@ module Authorizable
     end
   
     def current_user
-      if cookies[REMEMBER_ME_COOKIE_NAME].present? && !cookies[REMEMBER_ME_COOKIE_NAME].blank?
-        @current_user ||= Authorizable.configuration.user_model.find_by_auth_token(cookies[REMEMBER_ME_COOKIE_NAME]) 
+      @current_user ||= find_current_user_according_to_auth_cookie
+      
+      # Impersonation
+      if @current_user && @current_user.try(:admin?) && session[:impersonated_user_id]
+        @current_user = Authorizable.configuration.user_model.find session[:impersonated_user_id]
       end
+      
       @current_user
+    end
+    
+    def find_current_user_according_to_auth_cookie
+      if cookies[AUTH_COOKIE].present? && !cookies[AUTH_COOKIE].blank?
+        Authorizable.configuration.user_model.find_by_auth_token(cookies[AUTH_COOKIE]) 
+      end
+    end
+    
+    def reload_current_user
+      @current_user = find_current_user_according_to_auth_cookie
     end
     
     def redirect_to_after_sign_in
