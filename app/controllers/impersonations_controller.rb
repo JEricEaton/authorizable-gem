@@ -1,5 +1,5 @@
 class ImpersonationsController < ApplicationController
-  before_filter :require_admin_role
+  append_before_filter :require_admin_role
   
   def create
     session[:impersonated_user_id] = params[:user_id].to_i
@@ -25,6 +25,6 @@ class ImpersonationsController < ApplicationController
   
   private
     def require_admin_role
-      raise NonAdminNotAllowedToImpersonateError unless current_user.admin?
+      raise Authorizable::NonAdminNotAllowedToImpersonateError unless current_user.admin?
     end
 end

@@ -13,7 +13,7 @@ andrea:
   last_name: Rossouw
   email: andrea@desteni.co.za
   password_digest: $2a$10$fREDiaGGPkyyXBNXM/Ae/OLeDwSiw6bWfRexiqscvjjWnQa/Opghy # andrea
-  auth_token:
+  auth_token: AndreasAuthToken
   reset_password_token: 
   password_reset_sent_at:
   role: user
