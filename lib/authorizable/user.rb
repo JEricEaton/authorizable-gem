@@ -56,5 +56,13 @@ module Authorizable
       end
       true
     end
+    
+    def admin?
+      if defined?(:role)
+        role == 'admin'
+      else
+        false
+      end
+    end
   end
 end

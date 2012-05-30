@@ -6,6 +6,7 @@ robert:
   auth_token: RobertsAuthToken
   reset_password_token: 
   password_reset_sent_at: 
+  role: admin
     
 andrea:
   first_name: Andrea
@@ -15,6 +16,7 @@ andrea:
   auth_token:
   reset_password_token: 
   password_reset_sent_at:
+  role: user
     
 niklas:
   first_name: Niklas
@@ -25,3 +27,4 @@ niklas:
   auth_token:
   reset_password_token: 
   password_reset_sent_at:
+  role: user

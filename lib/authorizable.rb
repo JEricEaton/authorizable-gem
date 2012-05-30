@@ -1,6 +1,6 @@
 require "authorizable/engine"
 require "authorizable/authentication"
-require "authorizable/unauthorized_access_error"
+require "authorizable/exceptions"
 require "authorizable/configuration"
 require "authorizable/user"
 require "authorizable/validators/email_format_validator"

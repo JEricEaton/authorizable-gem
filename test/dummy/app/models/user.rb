@@ -1,3 +1,3 @@
 class User < ActiveRecord::Base
-  include Authorizable::User
+  include Authorizable::User  
 end
