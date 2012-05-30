@@ -2,9 +2,9 @@ class ImpersonationsController < ApplicationController
   before_filter :require_admin_role
   
   def create
-    session[:impersonated_user_id] = params[:impersonated_user_id]
+    session[:impersonated_user_id] = params[:user_id].to_i
     
-    if defined?(:after_impersonation_start)
+    if respond_to?(:after_impersonation_start)
       send(:after_impersonation_start)
     else
       redirect_to root_path
@@ -16,7 +16,7 @@ class ImpersonationsController < ApplicationController
     
     session.delete :impersonated_user_id
     
-    if defined?(:after_impersonation_stop)
+    if respond_to?(:after_impersonation_stop)
       send(:after_impersonation_stop)
     else
       redirect_to root_path
