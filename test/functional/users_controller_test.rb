@@ -12,7 +12,7 @@ class UsersControllerTest < ActionController::TestCase
   test "edit is not publicly accessible, should give unauthorized status code and render the unauthorized template" do
     get :edit, id: users(:robert)
     assert_response :unauthorized
-    assert_select 'h1', "Unauthorized access"
+    assert_select 'h1', "You're not signed in"
   end
   
   test "template in views/application should override the default template provided by the engine" do
