@@ -11,7 +11,18 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120530130657) do
+ActiveRecord::Schema.define(:version => 20120610123422) do
+
+  create_table "abuses", :force => true do |t|
+    t.string   "ip_address"
+    t.integer  "failed_attempts"
+    t.boolean  "banned"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  add_index "abuses", ["banned"], :name => "index_abuses_on_banned"
+  add_index "abuses", ["ip_address"], :name => "index_abuses_on_ip_address"
 
   create_table "users", :force => true do |t|
     t.string   "first_name"
