@@ -45,5 +45,15 @@ class SessionsControllerTest < ActionController::TestCase
     
     assert Authorizable::Abuse.ip_banned?("0.0.0.0"), 'After 10 failed login attempts the IP is banned'
   end
+  
+  test "if banned, IP can not sign in" do
+    Authorizable::Abuse.create do |abuse|
+      abuse.ip_address = "0.0.0.0"
+      abuse.banned = true
+    end
+    
+    post :create, session: { email: 'klevo@klevo.sk', password: 'antonio' }
+    assert_response :forbidden
+  end
 end
 

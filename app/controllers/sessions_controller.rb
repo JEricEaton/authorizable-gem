@@ -7,6 +7,12 @@ class SessionsController < ApplicationController
   def new; end
 
   def create
+    # If the IP is banned, do not allow to sign in
+    if Authorizable::Abuse.ip_banned?(request.remote_addr)
+      render 'banned', layout: false, status: :forbidden, formats: 'html'
+      return
+    end
+    
     reset_session # session fixation attack mitigation
     @user = Authorizable.configuration.user_model.find_by_email(session_params[:email])
     if @user.try(:authenticate, session_params[:password])
