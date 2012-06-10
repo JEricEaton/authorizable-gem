@@ -26,6 +26,7 @@ class SessionsController < ApplicationController
       after_sign_in if respond_to?(:after_sign_in)
       redirect_to redirect_to_after_sign_in
     else
+      Authorizable::Abuse.failed_attempt! request.remote_addr
       flash.now.alert = "Invalid email or password."
       render "new"
     end

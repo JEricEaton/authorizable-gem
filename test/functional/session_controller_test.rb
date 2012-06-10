@@ -36,14 +36,14 @@ class SessionsControllerTest < ActionController::TestCase
     assert_equal "auth_token=; path=/; expires=Thu, 01-Jan-1970 00:00:00 GMT", @response.header['Set-Cookie'], 'Remember me cookie gets deleted'
   end
   
-  test "10 failed sign ins result in a ban" do
-    assert !Authorizable::Abuse.ip_banned?('127.0.0.1')
+  test "10 failed sign-ins result in a ban" do
+    assert !Authorizable::Abuse.ip_banned?("0.0.0.0")
     
     1.upto(10).each do
       post :create, session: { email: 'klevo@klevo.sk', password: 'invalid' }
     end
     
-    assert Authorizable::Abuse.ip_banned?('127.0.0.1'), 'After 10 failed login attempts the user should be banned'
+    assert Authorizable::Abuse.ip_banned?("0.0.0.0"), 'After 10 failed login attempts the IP is banned'
   end
 end
 
