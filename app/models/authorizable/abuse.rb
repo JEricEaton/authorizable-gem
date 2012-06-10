@@ -19,7 +19,7 @@ module Authorizable
         end
       end
       
-      if BAN_ON_FAILED_ATTEMPTS_COUNT >= ip.failed_attempts
+      if ip.failed_attempts >= BAN_ON_FAILED_ATTEMPTS_COUNT
         ip.banned = true
       end
       

@@ -37,9 +37,8 @@ class SessionsControllerTest < ActionController::TestCase
   end
   
   test "10 failed sign-ins result in a ban" do
-    assert !Authorizable::Abuse.ip_banned?("0.0.0.0")
-    
     1.upto(10).each do
+      assert !Authorizable::Abuse.ip_banned?("0.0.0.0")
       post :create, session: { email: 'klevo@klevo.sk', password: 'invalid' }
     end
     
