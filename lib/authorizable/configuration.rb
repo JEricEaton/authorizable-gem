@@ -4,11 +4,9 @@ module Authorizable
                   :unauthorized_template, :public_resources, :password_salt,
                   :password_reset_token_column_name,
                   :inactive_account_sign_in_message, :halted_account_sign_in_message, :invalid_sign_in_message
-                  
 
     def initialize
       @mailer_sender     = 'donotreply@example.com'
-      @cookie_expiration = lambda { 1.year.from_now.utc }
       @unauthorized_template = 'unauthorized'
       @public_resources = {}
       @password_strategy = BcryptHashSecretStrategy
@@ -36,17 +34,11 @@ module Authorizable
   end
 
   # Configure Authorizable someplace sensible,
-  # like config/initializers/clearance.rb
-  #
-  # If you want users to only be signed in during the current session
-  # instead of being remembered, do this:
-  #
-  #   config.cookie_expiration = lambda { }
+  # like config/initializers/authorizable.rb
   #
   # @example
   #   Authorizable.configure do |config|
   #     config.mailer_sender     = 'me@example.com'
-  #     config.cookie_expiration = lambda { 2.weeks.from_now.utc }
   #     config.password_strategy = MyPasswordStrategy
   #     config.user_model        = MyNamespace::MyUser
   #   end

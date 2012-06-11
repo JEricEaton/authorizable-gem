@@ -1,3 +1,9 @@
 = Authorizable
 
-This project rocks and uses MIT-LICENSE.
+Authentication for Rails.
+
+== Features
+* User sign in and out
+* Support for active, inactive and halted user accounts
+* Admin role support
+* Sign in as another user (Impersonation)
