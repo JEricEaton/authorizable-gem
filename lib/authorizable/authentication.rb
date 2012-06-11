@@ -33,7 +33,11 @@ module Authorizable
       
       # Impersonation
       if @current_user && @current_user.try(:admin?) && session[:impersonated_user_id]
-        @current_user = Authorizable.configuration.user_model.find session[:impersonated_user_id]
+        begin
+          @current_user = Authorizable.configuration.user_model.find session[:impersonated_user_id]
+        rescue ActiveRecord::RecordNotFound
+          session.delete :impersonated_user_id
+        end
       end
       
       @current_user
