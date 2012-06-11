@@ -3,7 +3,35 @@
 Authentication for Rails.
 
 == Features
+
 * User sign in and out
 * Support for active, inactive and halted user accounts
 * Admin role support
 * Sign in as another user (Impersonation)
+
+== Installation
+
+1. In your User model, include the Authorizable::User module:
+
+  class User < ActiveRecord::Base
+    include Authorizable::User  
+  end
+  
+2. In your ApplicationController, include the Authorizable::Authentication module:
+
+  class ApplicationController < ActionController::Base
+    include Authorizable::Authentication
+  end
+  
+3. Review the migrations in <Authorizable gem location>/test/dummy/db/migrations and apply what is necessary to your application.
+
+4. Configure publicly accessible resources on a controller level (these do not require user to be logged in):
+
+** WARNING: root_path is automatically allowed. TODO: change this in future versions **
+
+  public_resources do
+    allow 'users' => %w(index new) # Allows just the 'index' and 'new' actions
+    allow 'pages' # Allows all controller actions
+  end
+
+
