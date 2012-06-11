@@ -18,10 +18,10 @@ class SessionsController < ApplicationController
     if @user.try(:authenticate, session_params[:password])
       # TODO: test inactive & halted user
       if @user.respond_to?(:inactive?) && @user.inactive?
-        flash.now.alert = "Your account is inactive. Please find the email sent to you on sign up and follow the instructions."
+        flash.now.alert = Authorizable.configuration.inactive_account_sign_in_message
         render "new" and return
       elsif @user.respond_to?(:halted?) && @user.halted?
-        flash.now.alert = "Your account has been halted. This is either due to you not paying your course fee or you violating the Terms of Use in other way."
+        flash.now.alert = Authorizable.configuration.halted_account_sign_in_message
         render "new" and return
       end
       @user.regenerate_auth_token
@@ -36,7 +36,7 @@ class SessionsController < ApplicationController
       redirect_to redirect_to_after_sign_in
     else
       Authorizable::Abuse.failed_attempt! request.remote_addr
-      flash.now.alert = "Invalid email or password."
+      flash.now.alert = Authorizable.configuration.invalid_sign_in_message
       render "new"
     end
   end
