@@ -25,14 +25,17 @@ class SessionsController < ApplicationController
         render "new" and return
       end
       @user.regenerate_auth_token
-      # :TODO test
+      
+      # TODO: test remember me
       if session_params[:remember_me] == '1'
         cookies.permanent[:auth_token] = @user.auth_token
       else  
         cookies[:auth_token] = @user.auth_token
       end
-      # :TODO test this callback
+      
+      # TODO: test after_sign_in callback
       after_sign_in if respond_to?(:after_sign_in)
+      
       redirect_to redirect_to_after_sign_in
     else
       Authorizable::Abuse.failed_attempt! request.remote_addr
