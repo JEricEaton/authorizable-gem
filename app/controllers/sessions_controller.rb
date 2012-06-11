@@ -16,9 +16,12 @@ class SessionsController < ApplicationController
     reset_session # session fixation attack mitigation
     @user = Authorizable.configuration.user_model.find_by_email(session_params[:email])
     if @user.try(:authenticate, session_params[:password])
-      # :TODO test inactive user
+      # TODO: test inactive & halted user
       if @user.respond_to?(:inactive?) && @user.inactive?
         flash.now.alert = "Your account is inactive. Please find the email sent to you on sign up and follow the instructions."
+        render "new" and return
+      elsif @user.respond_to?(:halted?) && @user.halted?
+        flash.now.alert = "Your account has been halted. This is either due to you not paying your course fee or you violating the Terms of Use in other way."
         render "new" and return
       end
       @user.regenerate_auth_token
