@@ -8,7 +8,7 @@ class SessionsController < ApplicationController
 
   def create
     # If the IP is banned, do not allow to sign in
-    if Authorizable::Abuse.ip_banned?(request.remote_addr)
+    if Authorizable::Abuse.ip_banned?(request.remote_ip)
       render 'banned', layout: false, status: :forbidden, formats: 'html'
       return
     end
@@ -38,7 +38,7 @@ class SessionsController < ApplicationController
       
       redirect_to redirect_to_after_sign_in
     else
-      Authorizable::Abuse.failed_attempt! request.remote_addr
+      Authorizable::Abuse.failed_attempt! request.remote_ip
       flash.now.alert = Authorizable.configuration.invalid_sign_in_message
       render "new"
     end
