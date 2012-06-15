@@ -10,7 +10,7 @@ class PasswordResetsController < ApplicationController
   def update
     set_user
     @user.force_password_validation = true
-    if @user.password_reset_sent_at.blank? || (@user.password_reset_sent_at + 2.hours) < Time.zone.now
+    if @user.password_reset_sent_at.blank? || @user.password_reset_expired?
       redirect_to new_password_reset_path, :alert => "Password reset has expired, you need to try again."  
     elsif @user.update_attributes(user_params)
       redirect_to sign_in_path, :notice => "Password has been reset. You can sign in using your new password."  

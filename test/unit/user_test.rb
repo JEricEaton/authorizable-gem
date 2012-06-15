@@ -25,5 +25,18 @@ module Authorizable
       robert = users(:robert)
       assert !robert.authenticate('notthere')
     end
+    
+    test "password_reset_expired?" do
+      user = users(:robert)
+      user.password_reset_sent_at = Time.mktime(2011, 1, 2, 10, 1)
+      
+      Timecop.travel Time.mktime(2011, 1, 2, 12, 0) do
+        assert !user.password_reset_expired?
+      end
+      
+      Timecop.travel Time.mktime(2011, 1, 2, 12, 2) do
+        assert user.password_reset_expired?
+      end
+    end
   end
 end

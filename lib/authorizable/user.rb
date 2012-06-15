@@ -64,5 +64,9 @@ module Authorizable
         false
       end
     end
+    
+    def password_reset_expired?
+      (password_reset_sent_at + 2.hours) < Time.zone.now
+    end
   end
 end
