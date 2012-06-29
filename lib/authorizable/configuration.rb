@@ -12,7 +12,7 @@ module Authorizable
       @password_strategy = BcryptHashSecretStrategy
       @password_reset_token_column_name = 'reset_password_token'
       @inactive_account_sign_in_message = "Your account is inactive. Please find the email sent to you on sign up and follow the instructions."
-      @halted_account_sign_in_message = "Your account has been halted. This is either due to you not paying your course fee or you violating the Terms of Use in other way."
+      @halted_account_sign_in_message = "Your account has been halted due to inactivity and/or violation of the Terms of Use."
       @invalid_sign_in_message = "Invalid email or password."
     end
 
