@@ -38,5 +38,42 @@ module Authorizable
         assert user.password_reset_expired?
       end
     end
+    
+    test "currrent password validation needs to be explicitly enabled to check for current password" do
+      robert = users(:robert)
+      invalid_password_update_params = { password: 'newPassword', password_confirmation: 'newPassword', current_password: '' }
+      assert robert.update_attributes(invalid_password_update_params)
+      assert robert.authenticate('newPassword')
+    end
+      
+    test "with enabled current password validation empty or no valud does not pass" do
+      robert = users(:robert)
+      robert.validate_current_password = true
+      
+      invalid_password_update_params = { password: 'newPassword2', password_confirmation: 'newPassword2', current_password: '' }
+      assert !robert.update_attributes(invalid_password_update_params)
+      assert !robert.authenticate('newPassword2')
+      
+      invalid_password_update_params = { password: 'newPassword2', password_confirmation: 'newPassword2' }
+      assert !robert.update_attributes(invalid_password_update_params)
+      assert !robert.authenticate('newPassword2')
+      
+      invalid_password_update_params = { password: 'newPassword2', password_confirmation: 'newPassword2', current_password: nil }
+      assert !robert.update_attributes(invalid_password_update_params)
+      assert !robert.authenticate('newPassword2')
+      
+      invalid_password_update_params = { password: 'newPassword2', password_confirmation: 'newPassword2', current_password: 'invalid' }
+      assert !robert.update_attributes(invalid_password_update_params)
+      assert !robert.authenticate('newPassword2')
+    end
+      
+    test "valid password update" do
+      robert = users(:robert)
+      robert.validate_current_password = true
+      
+      valid_password_update_params = { password: 'newPassword2', password_confirmation: 'newPassword2', current_password: 'antonio' }
+      assert robert.update_attributes(valid_password_update_params)
+      assert robert.authenticate('newPassword2')
+    end
   end
 end

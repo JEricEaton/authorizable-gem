@@ -6,7 +6,7 @@ module Authorizable
     extend ActiveSupport::Concern
   
     included do
-      attr_accessor :password, :current_password, :force_password_validation
+      attr_accessor :password, :current_password, :force_password_validation, :validate_current_password
       attr_accessible :password, :current_password, :password_confirmation
       
       validates :email, 
@@ -17,10 +17,10 @@ module Authorizable
         presence: true, 
         confirmation: true, 
         length: { minimum: 6, message: 'must be at least 6 characters long' }, 
-        :if => lambda { new_record? || current_password.present? || force_password_validation }
+        if: -> { new_record? || current_password.present? || force_password_validation }
       validates :current_password, 
         current_password_matches: true, 
-        :if => lambda { current_password.present? }
+        if: -> { validate_current_password }
         
       before_save :set_password_digest
     end
