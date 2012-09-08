@@ -1,0 +1,9 @@
+v0.1.9 - 8 Sep 2012
+===================
+
+Explicit current password validation. Always use this in your password change controller:
+
+  user.validate_current_password = true
+  user.update_attributes user_params
+  
+In the above example :current_password has to be included in the params and match the actual current password.
