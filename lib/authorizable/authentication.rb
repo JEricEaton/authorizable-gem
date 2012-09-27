@@ -8,14 +8,14 @@ module Authorizable
   
     included do
       if Authorizable.configuration.nil?
-        raise "Authorizable has not been configured!"
+        throw "Authorizable has not been configured!"
       end
       
       prepend_before_filter :require_authentication
       helper_method :current_user, :admin_route?
       hide_action :current_user, :admin_route?, :render_unauthorized, :after_sign_in
       
-      rescue_from Authorizable::UnathorizedAccessError, :with => :render_unauthorized
+      rescue_from Authorizable::UnathorizedAccessError, with: :render_unauthorized
     end
   
     module ClassMethods
@@ -29,7 +29,7 @@ module Authorizable
     end
   
     def current_user
-      @current_user ||= find_current_user_according_to_auth_cookie
+      @current_user ||= find_active_user_according_to_auth_cookie
       
       # Impersonation
       if @current_user && @current_user.try(:admin?) && session[:impersonated_user_id]
@@ -43,14 +43,19 @@ module Authorizable
       @current_user
     end
     
-    def find_current_user_according_to_auth_cookie
+    def find_active_user_according_to_auth_cookie
       if cookies[AUTH_COOKIE].present? && !cookies[AUTH_COOKIE].blank?
-        Authorizable.configuration.user_model.find_by_auth_token(cookies[AUTH_COOKIE]) 
+        scope = Authorizable.configuration.user_model.tap do |scope|
+          if scope.respond_to? :active
+            scope = scope.active
+          end
+        end
+        scope.find_by_auth_token(cookies[AUTH_COOKIE])
       end
     end
     
     def reload_current_user
-      @current_user = find_current_user_according_to_auth_cookie
+      @current_user = find_active_user_according_to_auth_cookie
     end
     
     def redirect_to_after_sign_in
