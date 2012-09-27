@@ -30,7 +30,7 @@ module Authorizable
   
     def current_user
       @current_user ||= find_active_user_according_to_auth_cookie
-      
+
       # Impersonation
       if @current_user && @current_user.try(:admin?) && session[:impersonated_user_id]
         begin
@@ -44,14 +44,13 @@ module Authorizable
     end
     
     def find_active_user_according_to_auth_cookie
-      if cookies[AUTH_COOKIE].present? && !cookies[AUTH_COOKIE].blank?
-        scope = Authorizable.configuration.user_model.tap do |scope|
-          if scope.respond_to? :active
-            scope = scope.active
-          end
-        end
-        scope.find_by_auth_token(cookies[AUTH_COOKIE])
+      return nil if cookies[AUTH_COOKIE].blank?
+
+      scope = Authorizable.configuration.user_model
+      if scope.respond_to?(:active)
+        scope = scope.active
       end
+      scope.where(auth_token: cookies[AUTH_COOKIE]).first
     end
     
     def reload_current_user
