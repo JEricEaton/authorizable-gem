@@ -13,17 +13,16 @@ gem "jquery-rails"
 # Git. Remember to move these dependencies to your gemspec before releasing
 # your gem to rubygems.org.
 
-# To use debugger
-# gem 'ruby-debug19', :require => 'ruby-debug'
+# For hashing passwords
+gem 'bcrypt-ruby', '~> 3.0.0'
 
-# Pry as debugger
-gem 'pry'
+# Run tests by line number
+gem 'm'
+
+gem 'timecop'
 
 # Capybara for integration testing
 gem 'capybara'
 
-# For hashing passwords
-gem 'bcrypt-ruby', '~> 3.0.0'
-
-gem 'timecop'
-
+# Pry as debugger
+gem 'pry', require: 'pry'
