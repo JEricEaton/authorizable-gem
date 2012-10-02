@@ -15,7 +15,7 @@ class SessionsControllerTest < ActionController::TestCase
 
   test "succesful sign in with email and password" do
     post :create, session: { email: 'klevo@klevo.sk', password: 'antonio' }
-    assert_redirected_to '/users/' + @robert.to_param # Defined in dummy's ApplicationController#redirect_to_after_sign_in
+    assert_redirected_to @robert # Defined in dummy's ApplicationController#redirect_to_after_sign_in
     
     @robert.reload
     assert_not_equal @robert.auth_token, "RobertsAuthToken", 'auth_token has been regenerated'
@@ -31,6 +31,11 @@ class SessionsControllerTest < ActionController::TestCase
   test "if r parameter is provided, redirect there" do
     post :create, session: { email: 'klevo@klevo.sk', password: 'antonio', r: new_user_path }
     assert_redirected_to new_user_path
+  end
+
+  test "does not allow to redirect to as return to external domain" do
+    post :create, session: { email: 'klevo@klevo.sk', password: 'antonio', r: "http://stackoverflow.com/questions/6714196/ruby-url-encoding-string" }
+    assert_redirected_to @robert
   end
   
   test "sign out - resets auth_token field and removes cookie" do
