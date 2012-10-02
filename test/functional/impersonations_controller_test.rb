@@ -24,7 +24,7 @@ class ImpersonationsControllerTest < ActionController::TestCase
   test "anonymous user is not allowed to impersonate" do
     assert_nil @request.cookies[:auth_token]
     post :create, user_id: @andrea.id
-    assert_response :unauthorized
+    assert_response :redirect
   end
   
   test "non admin is not allowed to impersonate" do

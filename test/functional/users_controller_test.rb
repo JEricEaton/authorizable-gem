@@ -11,21 +11,21 @@ class UsersControllerTest < ActionController::TestCase
 
   test "edit is not publicly accessible, should give unauthorized status code and render the unauthorized template" do
     get :edit, id: users(:robert)
-    assert_response :unauthorized
+    assert_response :redirect
     assert_select 'h1', "You're not signed in"
   end
   
   test "template in views/application should override the default template provided by the engine" do
     Authorizable.configuration.unauthorized_template = 'custom_unauthorized'
     get :edit, id: users(:robert)
-    assert_response :unauthorized
+    assert_response :redirect
     assert_select 'h1', "You're not allowed here dude!"
   end
   
   test "blank remember me cookie does not authorize anyone" do
     @request.cookies[:auth_token] = ''
     get :edit, id: users(:robert)
-    assert_response :unauthorized
+    assert_response :redirect
     assert_nil @controller.current_user
     assert_nil assigns(:current_user)
   end
@@ -33,7 +33,7 @@ class UsersControllerTest < ActionController::TestCase
   test "spaces filled remember me cookie does not authorize anyone" do
     @request.cookies[:auth_token] = '   '
     get :edit, id: users(:robert)
-    assert_response :unauthorized
+    assert_response :redirect
     assert_nil @controller.current_user
     assert_nil assigns(:current_user)
   end

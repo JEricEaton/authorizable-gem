@@ -15,7 +15,7 @@ module Authorizable
       helper_method :current_user, :admin_route?
       hide_action :current_user, :admin_route?, :render_unauthorized, :after_sign_in
       
-      rescue_from Authorizable::UnathorizedAccessError, with: :render_unauthorized
+      rescue_from Authorizable::UnathorizedAccessError, with: :redirect_to_sign_in
     end
   
     module ClassMethods
@@ -102,6 +102,10 @@ module Authorizable
     
     def render_unauthorized
       render Authorizable.configuration.unauthorized_template, layout: false, status: :unauthorized, formats: 'html'
+    end
+
+    def redirect_to_sign_in
+      redirect_to sign_in_path(r: request.path)
     end
   end
 end
