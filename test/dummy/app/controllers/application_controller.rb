@@ -4,7 +4,6 @@ class ApplicationController < ActionController::Base
   include Authorizable::Authentication
   
   public_resources do
-    allow 'users' => %w(index)
   end
   
   def redirect_to_after_sign_in
