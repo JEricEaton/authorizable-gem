@@ -27,6 +27,11 @@ class SessionsControllerTest < ActionController::TestCase
     assert_equal @robert.auth_token, "RobertsAuthToken", 'auth_token has not been regenerated'
     assert_match /invalid/i, flash[:alert]
   end
+
+  test "if r parameter is provided, redirect there" do
+    post :create, session: { email: 'klevo@klevo.sk', password: 'antonio', r: new_user_path }
+    assert_redirected_to new_user_path
+  end
   
   test "sign out - resets auth_token field and removes cookie" do
     @request.cookies[:auth_token] = 'RobertsAuthToken'

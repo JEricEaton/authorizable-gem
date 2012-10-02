@@ -33,10 +33,14 @@ class SessionsController < ApplicationController
         cookies[:auth_token] = @user.auth_token
       end
       
-      # TODO: test after_sign_in callback
       after_sign_in if respond_to?(:after_sign_in)
-      
-      redirect_to redirect_to_after_sign_in
+
+      if return_to_path
+        redirect_to return_to_path
+      else
+        # TODO: test after_sign_in callback
+        redirect_to redirect_to_after_sign_in
+      end
     else
       Authorizable::Abuse.failed_attempt! request.remote_ip
       flash.now.alert = Authorizable.configuration.invalid_sign_in_message
@@ -54,4 +58,17 @@ class SessionsController < ApplicationController
     def session_params
       params[:session].slice(:email, :password, :remember_me)
     end
+
+    def return_to_path
+      url = ""
+      if params[:r]
+        url = params[:r].to_s
+      elsif params[:session] && params[:session][:r]
+        url = params[:session][:r].to_s
+      end
+      if url && url[0] == '/' # this only allows paths relative to the root
+        url
+      end
+    end
+    helper_method :return_to_path
 end
