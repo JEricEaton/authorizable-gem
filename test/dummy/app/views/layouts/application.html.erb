@@ -8,7 +8,16 @@
 </head>
 <body>
   
-<p><%= link_to 'Sign out', sign_out_path, method: :delete %></p>
+<div id="current_user">
+  <p>Current user: <pre><%= current_user %></pre></p>
+
+  <ul>
+    <li><%= link_to 'Sign in', :sign_in %></li>
+    <li><%= link_to 'Sign out', sign_out_path, method: :delete %></li>
+  </ul>
+</div>
+
+<hr>
 
 <%= yield %>
 
