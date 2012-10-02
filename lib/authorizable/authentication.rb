@@ -81,7 +81,7 @@ module Authorizable
       end
     end
 
-    # Can unautrorized user access the current controller#action?
+    # Can unauthorized user access the current controller#action?
     # :root is allowed by default
     def guest_can?
       public_resources = Authorizable.configuration.public_resources
