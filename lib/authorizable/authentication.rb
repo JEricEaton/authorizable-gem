@@ -13,7 +13,7 @@ module Authorizable
       
       prepend_before_filter :require_authentication
       helper_method :current_user, :admin_route?
-      hide_action :current_user, :admin_route?, :render_unauthorized, :after_sign_in
+      hide_action :current_user, :admin_route?, :redirect_to_sign_in, :after_sign_in
       
       rescue_from Authorizable::UnathorizedAccessError, with: :redirect_to_sign_in
     end
@@ -98,10 +98,6 @@ module Authorizable
 
     def admin_route?
       params[:controller].index('admin/') == 0
-    end
-    
-    def render_unauthorized
-      render Authorizable.configuration.unauthorized_template, layout: false, status: :unauthorized, formats: 'html'
     end
 
     def redirect_to_sign_in
