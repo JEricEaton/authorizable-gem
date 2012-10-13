@@ -42,7 +42,7 @@ class SessionsControllerTest < ActionController::TestCase
     @request.cookies[:auth_token] = 'RobertsAuthToken'
     delete :destroy
     @robert.reload
-    assert_equal @robert.auth_token, '', 'auth_token has been emptied'
+    assert_nil @robert.auth_token
     assert_equal "auth_token=; path=/; expires=Thu, 01-Jan-1970 00:00:00 GMT", @response.header['Set-Cookie'], 'Remember me cookie gets deleted'
   end
   

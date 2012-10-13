@@ -50,7 +50,7 @@ class SessionsController < ApplicationController
 
   def destroy
     cookies.delete(:auth_token)
-    current_user.update_attribute :auth_token, ''
+    current_user.update_attribute :auth_token, nil
     redirect_to sign_in_path, :notice => "You've signed out."
   end
   
