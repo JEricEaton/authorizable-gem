@@ -101,7 +101,8 @@ module Authorizable
     end
 
     def redirect_to_sign_in
-      redirect_to sign_in_path(r: request.path)
+      r = request.url.split(request.host).second
+      redirect_to sign_in_path(r: r)
     end
   end
 end

@@ -35,7 +35,7 @@ class UsersControllerTest < ActionController::TestCase
 
   test "when redirected to sign in after unauthorized access the params are also remembered" do
     get :edit, id: users(:robert).id, something: 32
-    r = CGI.escape "/edit/#{users(:robert).id}?something=32"
+    r = "/users/#{users(:robert).id}/edit?something=32"
     assert_redirected_to sign_in_url(r: r)
   end
 end
