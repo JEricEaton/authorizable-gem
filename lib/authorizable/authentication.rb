@@ -22,6 +22,10 @@ module Authorizable
       def public_resources
         yield
       end
+
+      def resources_for_role role
+        # todo
+      end
     
       def allow(contoller_with_actions)
         Authorizable.configuration.add_public_resource contoller_with_actions
