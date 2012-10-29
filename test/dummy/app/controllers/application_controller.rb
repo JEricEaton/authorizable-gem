@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
   
   include Authorizable::Authentication
 
-  # namespace_authorization_required_for :admin
+  # protect_namespaces :admin, :wiki
   
   group_access :public do |a|
     a.allow 'pages' => %w(home)
