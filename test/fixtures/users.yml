@@ -7,7 +7,7 @@ robert:
   reset_password_token: 
   password_reset_sent_at: 
   role: admin
-    
+
 andrea:
   first_name: Andrea
   last_name: Rossouw
@@ -17,7 +17,7 @@ andrea:
   reset_password_token: 
   password_reset_sent_at:
   role: user
-    
+
 niklas:
   first_name: Niklas
   last_name: Nidahl
