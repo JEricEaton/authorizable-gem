@@ -1,5 +1,24 @@
+require 'singleton'
+
 # Usage: Include Authorizable::Authentication in your ApplicationController
 module Authorizable
+  class ResourceAllower
+    include Singleton
+    attr_accessor :role
+
+    def initialize
+      @role_based_resources = RoleBasedResources.new
+    end
+
+    def allow controller_with_actions
+      @role_based_resources.allow role, controller_with_actions
+    end
+
+    def can_access? role, controller, action = nil
+      @role_based_resources.can_access? role, controller, action
+    end
+  end
+
   module Authentication
     extend ActiveSupport::Concern
     
@@ -19,18 +38,20 @@ module Authorizable
     end
   
     module ClassMethods
-      def public_resources
-        yield
+      def resources_for role
+        ResourceAllower.instance.role = role
+        yield ResourceAllower.instance
       end
 
-      def resources_for_role role
-        # todo: this should be changed to calling methods on a object passed to yield
-        @@allow_role = role
+      # deprecated
+      def public_resources
+        puts "Authorizable public_resources controller method is deprecated. Use the new 'resources_for'!"
         yield
-        @@allow_role = nil
       end
     
+      # deprecated
       def allow(contoller_with_actions)
+        puts "Authorizable allow controller method is deprecated. Use the new 'resources_for'!"
         Authorizable.configuration.add_public_resource contoller_with_actions
       end
     end

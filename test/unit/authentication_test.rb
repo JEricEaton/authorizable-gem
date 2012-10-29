@@ -5,6 +5,10 @@ module Authorizable
   # Create a Rails Controller in place, to minimize test dependencies
   class ExampleController < ActionController::Base
     include Authorizable::Authentication
+
+    resources_for :public do |r|
+      r.allow 'pages' => %w(home)
+    end
     
     # Override these methods to get rid of "NoMethodError: undefined method `cookie_jar' for nil:NilClass"
     attr_accessor :cookies, :params
@@ -40,6 +44,10 @@ module Authorizable
     test "unless the admin word is suffixed with slash it's not considered an admin router" do
       @subject.params = { controller: 'admin_users' }
       assert !@subject.admin_route?
+    end
+
+    test "role_based_resources class attribute is populated when the first call to allow happens" do
+      assert ResourceAllower.instance.can_access?(:public, 'pages', 'home')
     end
   end
 end

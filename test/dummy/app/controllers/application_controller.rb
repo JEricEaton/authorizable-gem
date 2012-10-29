@@ -3,11 +3,12 @@ class ApplicationController < ActionController::Base
   
   include Authorizable::Authentication
   
-  public_resources do
+  resources_for :public do |r|
+    r.allow 'pages' => %w(home)
   end
 
-  resources_for_role :product_manager do
-    allow 'admin/products' => %w(index add edit destroy)
+  resources_for :product_manager do |r|
+    r.allow 'admin/products' => %w(index add edit destroy)
   end
   
   def redirect_to_after_sign_in
