@@ -24,7 +24,10 @@ module Authorizable
       end
 
       def resources_for_role role
-        # todo
+        # todo: this should be changed to calling methods on a object passed to yield
+        @@allow_role = role
+        yield
+        @@allow_role = nil
       end
     
       def allow(contoller_with_actions)
