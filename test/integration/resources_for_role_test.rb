@@ -23,8 +23,7 @@ class ResourcesForRoleTest < ActionDispatch::IntegrationTest
     assert_response :redirect
   end
 
-  test "with product_manager permissions you can access product_managers resource" do
-    skip
+  test "with product_manager permissions you can access product_managers resource allowed in ApplicationController" do
     @andrea.product_manager = true
     @andrea.save!
     cookies[:auth_token] = @andrea.auth_token
