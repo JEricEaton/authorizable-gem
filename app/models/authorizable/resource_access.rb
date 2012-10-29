@@ -27,10 +27,12 @@ module Authorizable
     end
 
     def protect_namespace namespace
+      namespace = :__no_namespace__ if namespace.nil?
       @protected_namespaces << namespace.to_sym unless protected_namespace? namespace
     end
 
     def protected_namespace? namespace
+      namespace = :__no_namespace__ if namespace.nil?
       @protected_namespaces.include? namespace.to_sym
     end
 

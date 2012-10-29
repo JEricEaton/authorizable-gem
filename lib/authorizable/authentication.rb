@@ -85,14 +85,14 @@ module Authorizable
 
     def authorized?
       # todo: require access_to_route_namespaces only if the namespace requires it - admin should require it by default 
-      if current_user && routing_namespace
+      if current_user && ResourceAccess.protected_namespace?(routing_namespace)
         unless current_user.respond_to? :access_to_route_namespaces
           throw "User instance needs to respond to 'access_to_route_namespaces'. This is where you can explicitly define user's access to resources based on namespaces."
         end
         ResourceAccess.allowed? current_user.access_to_route_namespaces, params[:controller], params[:action]
       elsif current_user
         # The basic rule for all applications using Authorizable:
-        # ** Logged in user has access to all resources without a namespace **
+        # ** Logged in user has access to all resources unless the namespace is protected - then the access has to be explicitly allowed to a role using 'group_access' controller method **
         true
       else
         ResourceAccess.allowed? :public, params[:controller], params[:action]

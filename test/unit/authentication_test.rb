@@ -58,7 +58,7 @@ module Authorizable
       refute ResourceAccess.allowed?(:product_manager, 'something_non_existent')
     end
 
-    test ":admin namespace is protected by default" do
+    test "admin namespace is protected by default" do
       assert ResourceAccess.protected_namespace?(:admin)
       assert ResourceAccess.protected_namespace?('admin')
     end
