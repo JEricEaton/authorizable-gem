@@ -16,12 +16,18 @@ module Authorizable
       hide_action :current_user, :admin_route?, :redirect_to_sign_in, :after_sign_in
       
       rescue_from Authorizable::UnathorizedAccessError, with: :redirect_to_sign_in
+
+      protect_namespaces :admin
     end
   
     module ClassMethods
       def group_access role
         ResourceAccess.instance.role = role
         yield ResourceAccess.instance
+      end
+
+      def protect_namespaces *namespaces
+        namespaces.each { |n| ResourceAccess.instance.protect_namespace n }
       end
 
       # deprecated
