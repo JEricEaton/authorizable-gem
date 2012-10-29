@@ -8,7 +8,6 @@ module Authorizable
     def initialize
       @mailer_sender     = 'donotreply@example.com'
       @unauthorized_template = 'unauthorized'
-      @public_resources = {}
       @password_strategy = BcryptHashSecretStrategy
       @password_reset_token_column_name = 'reset_password_token'
       @inactive_account_sign_in_message = "Your account is inactive. Please find the email sent to you on sign up and follow the instructions."
@@ -18,14 +17,6 @@ module Authorizable
 
     def user_model
       @user_model || ::User
-    end
-    
-    def add_public_resource(contoller_with_actions)
-      if contoller_with_actions.is_a?(String)
-        public_resources[contoller_with_actions] = :all
-      else
-        public_resources.merge! contoller_with_actions
-      end
     end
   end
 

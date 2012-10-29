@@ -33,7 +33,6 @@ module Authorizable
       # deprecated
       def allow(contoller_with_actions)
         puts "Authorizable allow controller method is deprecated. Use the new 'resources_for'!"
-        Authorizable.configuration.add_public_resource contoller_with_actions
       end
     end
   
@@ -79,6 +78,7 @@ module Authorizable
     end
 
     def authorized?
+      # todo: require access_to_route_namespaces only if the namespace requires it - admin should require it by default 
       if current_user && routing_namespace
         unless current_user.respond_to? :access_to_route_namespaces
           throw "User instance needs to respond to 'access_to_route_namespaces'. This is where you can explicitly define user's access to resources based on namespaces."

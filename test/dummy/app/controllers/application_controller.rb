@@ -2,6 +2,8 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
   
   include Authorizable::Authentication
+
+  # namespace_authorization_required_for :admin
   
   resources_for :public do |r|
     r.allow 'pages' => %w(home)
