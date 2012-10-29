@@ -6,7 +6,7 @@ Authentication for Rails.
 
 * User sign in and out
 * Support for active, inactive and halted user accounts
-* Admin role support
+* Namespace based role support
 * Sign in as another user (Impersonation)
 
 == Installation
