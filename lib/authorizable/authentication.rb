@@ -19,20 +19,20 @@ module Authorizable
     end
   
     module ClassMethods
-      def resources_for role
+      def group_access role
         ResourceAccess.instance.role = role
         yield ResourceAccess.instance
       end
 
       # deprecated
       def public_resources
-        puts "Authorizable public_resources controller method is deprecated. Use the new 'resources_for'!"
+        puts "Authorizable public_resources controller method is deprecated. Use the new 'group_access'!"
         yield
       end
     
       # deprecated
       def allow(contoller_with_actions)
-        puts "Authorizable allow controller method is deprecated. Use the new 'resources_for'!"
+        puts "Authorizable allow controller method is deprecated. Use the new 'group_access'!"
       end
     end
   

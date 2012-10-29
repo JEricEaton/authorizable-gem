@@ -9,12 +9,12 @@ module Authorizable
 
     include Authorizable::Authentication
 
-    resources_for :public do |r|
-      r.allow 'pages' => %w(home)
+    group_access :public do |a|
+      a.allow 'pages' => %w(home)
     end
 
-    resources_for :product_manager do |r|
-      r.allow 'admin/products' => %w(index show)
+    group_access :product_manager do |a|
+      a.allow 'admin/products' => %w(index show)
     end
   end
   

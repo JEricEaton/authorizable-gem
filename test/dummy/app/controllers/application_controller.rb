@@ -5,12 +5,12 @@ class ApplicationController < ActionController::Base
 
   # namespace_authorization_required_for :admin
   
-  resources_for :public do |r|
-    r.allow 'pages' => %w(home)
+  group_access :public do |a|
+    a.allow 'pages' => %w(home)
   end
 
-  resources_for :product_manager do |r|
-    r.allow 'admin/products' => %w(index add edit destroy)
+  group_access :product_manager do |a|
+    a.allow 'admin/products' => %w(index add edit destroy)
   end
   
   def redirect_to_after_sign_in
