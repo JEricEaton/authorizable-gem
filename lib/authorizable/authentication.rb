@@ -79,35 +79,32 @@ module Authorizable
     end
 
     def authorized?
-      if current_user.respond_to?(:admin?) && current_user.admin? # Admin can access everything
-        true 
-      elsif current_user.nil? && guest_can?
-        true
-      elsif current_user && !admin_route?
-        true
-      else
-        false
-      end
-    end
-
-    # Can unauthorized user access the current controller#action?
-    # :root is allowed by default
-    def guest_can?
-      public_resources = Authorizable.configuration.public_resources
-      if request.path == ROOT_PATH
-        true
-      elsif public_resources[params[:controller]] && public_resources[params[:controller]] == :all
-        true
-      elsif public_resources[params[:controller]] && public_resources[params[:controller]].include?(params[:action])
+      if current_user && routing_namespace
+        unless current_user.respond_to? :access_to_route_namespaces
+          throw "User instance needs to respond to 'access_to_route_namespaces'. This is where you can explicitly define user's access to resources based on namespaces."
+        end
+        ResourceAccess.allowed? current_user.access_to_route_namespaces, params[:controller], params[:action]
+      elsif current_user
+        # The basic rule for all applications using Authorizable:
+        # ** Logged in user has access to all resources without a namespace **
         true
       else
-        false
+        ResourceAccess.allowed? :public, params[:controller], params[:action]
       end
     end
 
     def admin_route?
       params[:controller].index('admin/') == 0
     end
+
+    def routing_namespace
+      parts = params[:controller].split '/'
+      if parts.size > 1
+        parts.first
+      else
+        nil
+      end      
+    end    
 
     def redirect_to_sign_in
       r = request.url.split(request.host).second

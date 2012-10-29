@@ -28,7 +28,7 @@ class ImpersonationsControllerTest < ActionController::TestCase
   end
   
   test "non admin is not allowed to impersonate" do
-    @request.cookies[:auth_token] = 'AndreasAuthToken' # auth as Andrea
+    cookies[:auth_token] = 'AndreasAuthToken' # auth as Andrea
     
     assert_raise Authorizable::NonAdminNotAllowedToImpersonateError do
       post :create, user_id: @robert.id
