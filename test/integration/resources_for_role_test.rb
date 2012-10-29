@@ -22,4 +22,12 @@ class ResourcesForRoleTest < ActionDispatch::IntegrationTest
     get '/admin/products'
     assert_response :redirect
   end
+
+  test "with product_manager permissions you can access product_managers resource" do
+    @andrea.product_manager = true
+    @andrea.save!
+    cookies[:auth_token] = @andrea.auth_token
+    get '/admin/products'
+    assert_response :success
+  end
 end
