@@ -3,7 +3,7 @@ class User < ActiveRecord::Base
 
   attr_accessible :first_name, :last_name, :password, :password_confirmation, :email
 
-  def access_to_protected_namespaces
+  def access_roles
     [].tap do |allowed|
       allowed << :admin if admin?
       allowed << :product_manager if product_manager?

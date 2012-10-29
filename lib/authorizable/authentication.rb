@@ -84,12 +84,11 @@ module Authorizable
     end
 
     def authorized?
-      # todo: require access_to_protected_namespaces only if the namespace requires it - admin should require it by default 
       if current_user && ResourceAccess.protected_namespace?(routing_namespace)
-        unless current_user.respond_to? :access_to_protected_namespaces
-          throw "User instance needs to respond to 'access_to_protected_namespaces'. This is where you can explicitly define user's access to resources based on namespaces."
+        unless current_user.respond_to? :access_roles
+          throw "User instance needs to respond to 'access_roles'. This is where you can explicitly define user's access to resources based on namespaces."
         end
-        ResourceAccess.allowed? current_user.access_to_protected_namespaces, params[:controller], params[:action]
+        ResourceAccess.allowed? current_user.access_roles, params[:controller], params[:action]
       elsif current_user
         # The basic rule for all applications using Authorizable:
         # ** Logged in user has access to all resources unless the namespace is protected - then the access has to be explicitly allowed to a role using 'group_access' controller method **
