@@ -47,7 +47,7 @@ module Authorizable
     end
 
     test "role_based_resources class attribute is populated when the first call to allow happens" do
-      assert ResourceAllower.instance.can_access?(:public, 'pages', 'home')
+      assert ResourceAccess.allowed?(:public, 'pages', 'home')
     end
   end
 end

@@ -2,7 +2,7 @@ require 'singleton'
 
 # Usage: Include Authorizable::Authentication in your ApplicationController
 module Authorizable
-  class ResourceAllower
+  class ResourceAccess
     include Singleton
     attr_accessor :role
 
@@ -16,6 +16,10 @@ module Authorizable
 
     def can_access? role, controller, action = nil
       @role_based_resources.can_access? role, controller, action
+    end
+
+    def self.allowed? role, controller, action = nil
+      instance.can_access? role, controller, action
     end
   end
 
@@ -39,8 +43,8 @@ module Authorizable
   
     module ClassMethods
       def resources_for role
-        ResourceAllower.instance.role = role
-        yield ResourceAllower.instance
+        ResourceAccess.instance.role = role
+        yield ResourceAccess.instance
       end
 
       # deprecated
