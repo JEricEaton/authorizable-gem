@@ -3,15 +3,19 @@ require 'test_helper'
 
 module Authorizable
   # Create a Rails Controller in place, to minimize test dependencies
-  class ExampleController < ActionController::Base
+  class ExampleApplicationController < ActionController::Base
+    # Override these methods to get rid of "NoMethodError: undefined method `cookie_jar' for nil:NilClass"
+    attr_accessor :cookies, :params
+
     include Authorizable::Authentication
 
     resources_for :public do |r|
       r.allow 'pages' => %w(home)
     end
-    
-    # Override these methods to get rid of "NoMethodError: undefined method `cookie_jar' for nil:NilClass"
-    attr_accessor :cookies, :params
+
+    resources_for :product_manager do |r|
+      r.allow 'admin/products' => %w(index show)
+    end
   end
   
   class AuthenticationTest < ActiveSupport::TestCase
@@ -20,7 +24,7 @@ module Authorizable
     end
     
     def setup
-      @subject = ExampleController.new
+      @subject = ExampleApplicationController.new
       @subject.cookies = @subject.params = {}
     end
     
@@ -29,7 +33,7 @@ module Authorizable
     end
     
     test "controller class responds to public_resources" do
-      assert ExampleController.respond_to?(:public_resources)
+      assert ExampleApplicationController.respond_to?(:public_resources)
     end
     
     test "by default current_user returns nil" do
@@ -48,6 +52,10 @@ module Authorizable
 
     test "role_based_resources class attribute is populated when the first call to allow happens" do
       assert ResourceAccess.allowed?(:public, 'pages', 'home')
+      assert ResourceAccess.allowed?(:product_manager, 'admin/products', 'index')
+      assert ResourceAccess.allowed?(:product_manager, 'admin/products', 'show')
+      refute ResourceAccess.allowed?(:product_manager, 'admin/products')
+      refute ResourceAccess.allowed?(:product_manager, 'something_non_existent')
     end
   end
 end
