@@ -26,3 +26,5 @@ gem 'capybara'
 
 # Pry as debugger
 gem 'pry', require: 'pry'
+
+gem 'strong_parameters'

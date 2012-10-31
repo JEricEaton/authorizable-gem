@@ -7,6 +7,11 @@ class SessionsController < ApplicationController
   def new; end
 
   def create
+    # Enforce strong_attributes
+    unless params.respond_to? :require
+      throw "Authorizable requires the usage of strong_parameters gem!"
+    end
+
     # If the IP is banned, do not allow to sign in
     if Authorizable::Abuse.ip_banned?(request.remote_ip)
       render 'banned', layout: false, status: :forbidden, formats: 'html'
@@ -56,7 +61,7 @@ class SessionsController < ApplicationController
   
   private
     def session_params
-      params[:session].slice(:email, :password, :remember_me)
+      params.require(:session).permit(:email, :password, :remember_me)
     end
 
     def return_to_path

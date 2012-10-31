@@ -1,6 +1,7 @@
 ## v0.3.4 - 31 Oct 2012
 
-Got rid of attr_accessible in User module to allow strong_parameters from working correctly.
+- Got rid of attr_accessible in User module to allow strong_parameters from working correctly.
+- strong_parameters gem usage is required.
 
 ## v0.3.3 - 29 Oct 2012
 
