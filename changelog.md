@@ -1,3 +1,7 @@
+## v0.3.4 - 31 Oct 2012
+
+Got rid of attr_accessible in User module to allow strong_parameters from working correctly.
+
 ## v0.3.3 - 29 Oct 2012
 
 - Logged in user has access to all resources unless the namespace is protected - then the access has to be explicitly allowed to a role using 'group_access' controller method
