@@ -7,7 +7,6 @@ module Authorizable
   
     included do
       attr_accessor :password, :current_password, :force_password_validation, :validate_current_password
-      attr_accessible :password, :current_password, :password_confirmation
       
       validates :email, 
         presence: true, 
