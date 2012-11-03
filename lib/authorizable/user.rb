@@ -56,14 +56,6 @@ module Authorizable
       true
     end
     
-    def admin?
-      if defined?(:role)
-        role == 'admin'
-      else
-        false
-      end
-    end
-    
     def password_reset_expired?
       (password_reset_sent_at + 2.hours) < Time.zone.now
     end

@@ -1,3 +1,7 @@
+## v0.3.5 - 3 Nov 2012
+
+- admin? definition removed from Authorizable::User - it is the apps responsibility.
+
 ## v0.3.4 - 31 Oct 2012
 
 - Got rid of attr_accessible in User module to allow strong_parameters from working correctly.
