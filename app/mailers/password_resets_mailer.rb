@@ -1,5 +1,3 @@
-require 'base_mailer'
-
 class PasswordResetsMailer < BaseMailer
   def reset(user)
     @user = user  
