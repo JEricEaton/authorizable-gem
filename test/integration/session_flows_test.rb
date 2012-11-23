@@ -45,8 +45,8 @@ class SessionFlowsTest < ActionDispatch::IntegrationTest
     
     # Reset the password
     visit reset_path
-    fill_in 'New password', :with => 'newpass'
-    fill_in 'New password again', :with => 'newpass'
+    find('#user_password').set 'newpass'
+    find('#user_password_confirmation').set 'newpass'
     click_button 'Save my new password'
     
     # After password reset we land on sign in screen
