@@ -1,4 +1,4 @@
-<% if session[:impersonated_user_id] %>
+<% if session[:impersonated_user_id] && current_user %>
   <div id="impersonating">
      <%= link_to "Signed in as <strong>#{current_user.name}</strong>. Click here to cancel".html_safe, stop_impersonations_path, method: :post %>
   </div>

@@ -1,6 +1,8 @@
 class SessionsController < ApplicationController
   unloadable
   
+  include Authorizable::ImpersonationsHelper
+  
   skip_before_filter :require_authentication, :only => [:new, :create]
   
   # Sign in screen
@@ -54,6 +56,10 @@ class SessionsController < ApplicationController
   end
 
   def destroy
+    if impersonating?
+      stop_impersonating and return
+    end
+    
     cookies.delete(:auth_token)
     current_user.update_attribute :auth_token, nil
     redirect_to sign_in_path, :notice => "You've signed out."

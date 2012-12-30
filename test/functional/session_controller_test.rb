@@ -64,5 +64,18 @@ class SessionsControllerTest < ActionController::TestCase
     post :create, session: { email: 'klevo@klevo.sk', password: 'antonio' }
     assert_response :forbidden
   end
+  
+  test "if impersonating, sign out stops the impersonation" do
+    @andrea = users :andrea
+    
+    @request.cookies[:auth_token] = 'RobertsAuthToken' # auth as Robert
+    session[:impersonated_user_id] = @andrea.id
+    
+    delete :destroy
+    
+    @robert.reload
+    assert_equal 'RobertsAuthToken', @robert.auth_token
+    assert_equal 'RobertsAuthToken', @request.cookies[:auth_token]
+  end
 end
 
