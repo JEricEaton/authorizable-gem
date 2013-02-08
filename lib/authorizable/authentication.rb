@@ -57,14 +57,19 @@ module Authorizable
       @current_user
     end
     
+    MIN_AUTH_TOKEN_LENGHT = 10
     def find_active_user_according_to_auth_cookie
       return nil if cookies[AUTH_COOKIE].blank?
+      
+      auth_token = cookies[AUTH_COOKIE].to_s
+      return nil if auth_token.size < MIN_AUTH_TOKEN_LENGHT
 
       scope = Authorizable.configuration.user_model
       if scope.respond_to?(:active)
         scope = scope.active
       end
-      scope.where(auth_token: cookies[AUTH_COOKIE]).first
+      
+      scope.where(auth_token: auth_token).first
     end
     
     def reload_current_user

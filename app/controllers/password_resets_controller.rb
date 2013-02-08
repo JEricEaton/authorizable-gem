@@ -32,13 +32,13 @@ class PasswordResetsController < ApplicationController
   end
   
   private
-    def user_params
-      params.require(:user).permit(:password, :password_confirmation)
-    end
-    
-    def set_user
-      throw ActiveRecord::RecordNotFound if params[:id].blank?
-      @user = User.where(Authorizable.configuration.password_reset_token_column_name.to_sym => params[:id]).first
-      raise ActiveRecord::RecordNotFound unless @user
-    end
+  def user_params
+    params.require(:user).permit(:password, :password_confirmation)
+  end
+  
+  def set_user
+    throw ActiveRecord::RecordNotFound if params[:id].blank?
+    @user = User.where(Authorizable.configuration.password_reset_token_column_name.to_sym => params[:id]).first
+    raise ActiveRecord::RecordNotFound unless @user
+  end
 end
