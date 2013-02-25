@@ -1,9 +1,9 @@
 PATH
   remote: .
   specs:
-    authorizable (0.1)
+    authorizable (1.0.00)
       bcrypt-ruby (~> 3.0.0)
-      rails (~> 3.2.8)
+      rails (~> 3.2.12)
       strong_parameters
 
 GEM
