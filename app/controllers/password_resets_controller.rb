@@ -11,20 +11,22 @@ class PasswordResetsController < ApplicationController
     set_user
     @user.force_password_validation = true
     if @user.password_reset_sent_at.blank? || @user.password_reset_expired?
-      redirect_to new_password_reset_path, :alert => "Password reset has expired, you need to try again."  
+      redirect_to new_password_reset_path, alert: "Password reset has expired, you need to try again."  
     elsif @user.update_attributes(user_params)
-      redirect_to sign_in_path, :notice => "Password has been reset. You can sign in using your new password."  
+      redirect_to sign_in_path, notice: "Password has been reset. You can sign in using your new password."  
     else
       render :edit
     end
   end
   
   def create
-    user = User.find_by_email(params[:email])  
+    email = params[:email].to_s.chomp.strip
+    throw ActiveRecord::RecordNotFound if email.blank? || email.size < 3
+    user = User.where(email: email).first
     if user.try(:create_password_reset_token)
       PasswordResetsMailer.reset(user).deliver
     end
-    redirect_to new_password_reset_path, :notice => "Email sent with password reset instructions. Please check your email inbox."
+    redirect_to new_password_reset_path, notice: "Email sent with password reset instructions. Please check your email inbox."
   end
   
   def edit
@@ -37,8 +39,10 @@ class PasswordResetsController < ApplicationController
   end
   
   def set_user
-    throw ActiveRecord::RecordNotFound if params[:id].blank?
-    @user = User.where(Authorizable.configuration.password_reset_token_column_name.to_sym => params[:id]).first
+    # Do not allow to fuck around with anything else than at least a 6 characters long string
+    token = params[:id].to_s.chomp.strip
+    throw ActiveRecord::RecordNotFound if token.blank? || token.size < 6
+    @user = User.where(Authorizable.configuration.password_reset_token_column_name => token).first
     raise ActiveRecord::RecordNotFound unless @user
   end
 end
