@@ -6,7 +6,7 @@ require "authorizable/version"
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
   s.name        = "authorizable"
-  s.version     = "1.0.00"
+  s.version     = Authorizable::VERSION
   s.authors     = ["Robert Starsi"]
   s.email       = ["klevo@klevo.sk"]
   s.homepage    = "http://desteni.org"
