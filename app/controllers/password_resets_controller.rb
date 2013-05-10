@@ -21,7 +21,7 @@ class PasswordResetsController < ApplicationController
   
   def create
     email = params[:email].to_s.chomp.strip
-    throw ActiveRecord::RecordNotFound if email.blank? || email.size < 3
+    raise ActiveRecord::RecordNotFound if email.blank? || email.size < 3
     user = User.where(email: email).first
     if user.try(:create_password_reset_token)
       PasswordResetsMailer.reset(user).deliver
@@ -41,7 +41,7 @@ class PasswordResetsController < ApplicationController
   def set_user
     # Do not allow to fuck around with anything else than at least a 6 characters long string
     token = params[:id].to_s.chomp.strip
-    throw ActiveRecord::RecordNotFound if token.blank? || token.size < 6
+    raise ActiveRecord::RecordNotFound if token.blank? || token.size < 6
     @user = User.where(Authorizable.configuration.password_reset_token_column_name => token).first
     raise ActiveRecord::RecordNotFound unless @user
   end
