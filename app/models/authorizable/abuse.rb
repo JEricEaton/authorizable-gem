@@ -45,7 +45,7 @@ module Authorizable
     end
     
     def remaining_attempts_count
-      (Authorizable.configuration.ban_on_failed_attempts_count - failed_attempts) + 1
+      Authorizable.configuration.ban_on_failed_attempts_count - failed_attempts
     end
   end
 end

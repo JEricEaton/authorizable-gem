@@ -24,5 +24,13 @@ module Authorizable
         assert_equal 1, abuse.failed_attempts
       end
     end
+    
+    test "remaining_attempts_count" do
+      abuse = Abuse.new failed_attempts: 0
+      assert_equal 10, abuse.remaining_attempts_count
+      
+      abuse = Abuse.new failed_attempts: 9
+      assert_equal 1, abuse.remaining_attempts_count
+    end
   end
 end
