@@ -8,4 +8,8 @@ Rails.application.routes.draw do
   # match 'sign_up'  => 'users#new', :as => 'sign_up'
   match 'sign_in'  => 'sessions#new', :as => 'sign_in'
   match 'sign_out' => 'sessions#destroy', :via => :delete, :as => 'sign_out'
+  
+  namespace :admin do
+    resources :abuses
+  end
 end

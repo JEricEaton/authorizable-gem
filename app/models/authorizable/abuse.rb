@@ -3,6 +3,8 @@ module Authorizable
     self.table_name = 'abuses'
     BAN_ON_FAILED_ATTEMPTS_COUNT = 10
     
+    scope :banned, -> { where banned: true }
+    
     def self.ip_banned?(ip_address)
       where(banned: true, ip_address: ip_address).exists?
     end
