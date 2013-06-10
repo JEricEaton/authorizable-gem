@@ -31,9 +31,10 @@ module Authorizable
       
       ip.save
     end
-  end
-  
-  def unban!
-    udpate_attribute :banned, false
+    
+    def unban!
+      self.banned = false
+      save!
+    end
   end
 end

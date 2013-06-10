@@ -2,3 +2,7 @@ lamer:
   ip_address: "88.45.344.12"
   failed_attempts: 8
   banned: 0
+  
+john:
+  ip_address: "111.11.11.11"
+  banned: 1

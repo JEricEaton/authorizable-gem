@@ -1,4 +1,4 @@
-<%= title 'Banned IP addresses' %>
+<%= title 'Banned IP addresses' if self.respond_to?(:title) %>
 
 <p>Total of <%= pluralize @banned.count, 'address' %> banned.</p>
 

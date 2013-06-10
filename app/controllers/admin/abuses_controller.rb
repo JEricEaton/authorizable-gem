@@ -8,7 +8,7 @@ class Admin::AbusesController < ApplicationController
   def unban
     @abuse = Authorizable::Abuse.find params[:id]
     @abuse.unban!
-    flash[:notice] = "#{abuse.ip_address} unbanned."
+    flash[:notice] = "#{@abuse.ip_address} unbanned."
     redirect_to [:admin, :abuses]
   end
 end
