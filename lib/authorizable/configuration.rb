@@ -5,7 +5,7 @@ module Authorizable
                   :password_reset_token_column_name,
                   :inactive_account_sign_in_message, :halted_account_sign_in_message, 
                   :invalid_sign_in_message, :failed_attempts_warning,
-                  :ban_on_failed_attempts_count
+                  :ban_on_failed_attempts_count, :warn_after_failed_attempts_count
 
     def initialize
       @mailer_sender     = 'donotreply@example.com'
@@ -17,6 +17,7 @@ module Authorizable
       @invalid_sign_in_message = "Invalid email or password."
       @failed_attempts_warning = "Warning: After %remaining_attempts_count% more failed login attempt you'll be banned. Rember: You can easily reset your password - follow the \"I forgot my password\" link on the bottom."
       @ban_on_failed_attempts_count = 10
+      @warn_after_failed_attempts_count = 3
     end
 
     def user_model

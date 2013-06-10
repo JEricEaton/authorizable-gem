@@ -40,9 +40,8 @@ module Authorizable
       save!
     end
     
-    WARN_AFTER_FAILED_ATTEMPTS_COUNT = 3
     def show_ban_warning?
-      failed_attempts >= WARN_AFTER_FAILED_ATTEMPTS_COUNT
+      failed_attempts >= Authorizable.configuration.warn_after_failed_attempts_count
     end
     
     def remaining_attempts_count
