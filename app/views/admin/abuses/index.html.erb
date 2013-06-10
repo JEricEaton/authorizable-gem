@@ -2,3 +2,23 @@
 
 <p>Total of <%= pluralize @banned.count, 'address' %> banned</p>
 
+<table class="table">
+  <thead>
+    <tr>
+      <th>IP address</th>
+      <th></th>
+      <th>Created</th>
+      <th>Updated</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @banned.each do |abuse| %>
+      <tr>
+        <td><%= link_to abuse.ip_address, "http://www.infobyip.com/ip-#{abuse.ip_address}.html" %></td>
+        <td><%= link_to 'Unban', '#', class: 'btn btn-small btn-danger' %></td>
+        <td style="color: #666;"><%= time_ago_in_words abuse.created_at %> ago</td>
+        <td style="color: #666;"><%= time_ago_in_words abuse.updated_at %> ago</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
