@@ -49,8 +49,13 @@ class SessionsController < ApplicationController
         redirect_to redirect_to_after_sign_in
       end
     else
-      Authorizable::Abuse.failed_attempt! request.remote_ip
-      flash.now.alert = Authorizable.configuration.invalid_sign_in_message
+      abuse = Authorizable::Abuse.failed_attempt! request.remote_ip
+      if abuse.show_ban_warning?
+        flash.now.alert = Authorizable.configuration.failed_attempts_warning.sub('%remaining_attempts_count%', abuse.remaining_attempts_count.to_s)
+      else
+        flash.now.alert = Authorizable.configuration.invalid_sign_in_message
+      end
+      
       render "new"
     end
   end

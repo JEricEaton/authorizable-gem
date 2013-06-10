@@ -1,7 +1,6 @@
 module Authorizable
   class Abuse < ActiveRecord::Base
     self.table_name = 'abuses'
-    BAN_ON_FAILED_ATTEMPTS_COUNT = 10
     
     scope :banned, -> { where banned: true }
     
@@ -25,16 +24,29 @@ module Authorizable
         end
       end
       
-      if ip.failed_attempts >= BAN_ON_FAILED_ATTEMPTS_COUNT
+      if ip.failed_attempts >= Authorizable.configuration.ban_on_failed_attempts_count
         ip.banned = true
       end
       
-      ip.save
+      if ip.save
+        ip
+      else
+        false
+      end
     end
     
     def unban!
       self.banned = false
       save!
+    end
+    
+    WARN_AFTER_FAILED_ATTEMPTS_COUNT = 3
+    def show_ban_warning?
+      failed_attempts >= WARN_AFTER_FAILED_ATTEMPTS_COUNT
+    end
+    
+    def remaining_attempts_count
+      Authorizable.configuration.ban_on_failed_attempts_count - failed_attempts
     end
   end
 end
