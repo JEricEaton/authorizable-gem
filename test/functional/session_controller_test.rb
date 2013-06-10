@@ -47,9 +47,17 @@ class SessionsControllerTest < ActionController::TestCase
   end
   
   test "10 failed sign-ins result in a ban" do
-    1.upto(10).each do
+    1.upto(10).each do |attempts|
       assert !Authorizable::Abuse.ip_banned?("0.0.0.0")
       post :create, session: { email: 'klevo@klevo.sk', password: 'invalid' }
+      assert_response :success
+      assert_template :new
+      
+      if attempts >= Authorizable.configuration.warn_after_failed_attempts_count
+        assert_match /warning/i, @controller.flash[:alert], 'warn the user that he will be banned'
+      else
+        assert_match /invalid/i, @controller.flash[:alert], 'just a msg that your login/pass is invalid'
+      end
     end
     
     assert Authorizable::Abuse.ip_banned?("0.0.0.0"), 'After 10 failed login attempts the IP is banned'
