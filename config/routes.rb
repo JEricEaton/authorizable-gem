@@ -10,6 +10,8 @@ Rails.application.routes.draw do
   match 'sign_out' => 'sessions#destroy', :via => :delete, :as => 'sign_out'
   
   namespace :admin do
-    resources :abuses
+    resources :abuses do
+      post :unban, on: :member
+    end
   end
 end

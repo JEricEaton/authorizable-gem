@@ -15,7 +15,7 @@
     <% @banned.each do |abuse| %>
       <tr>
         <td><%= link_to abuse.ip_address, "http://www.infobyip.com/ip-#{abuse.ip_address}.html" %></td>
-        <td><%= link_to 'Unban', '#', class: 'btn btn-small btn-danger' %></td>
+        <td><%= link_to 'Unban', [:unban, :admin, abuse], method: :post, class: 'btn btn-small btn-danger' %></td>
         <td style="color: #666;"><%= time_ago_in_words abuse.created_at %> ago</td>
         <td style="color: #666;"><%= time_ago_in_words abuse.updated_at %> ago</td>
       </tr>
