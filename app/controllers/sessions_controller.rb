@@ -16,8 +16,7 @@ class SessionsController < ApplicationController
 
     # If the IP is banned, do not allow to sign in
     if Authorizable::Abuse.ip_banned?(request.remote_ip)
-      render 'banned', layout: false, status: :forbidden, formats: 'html'
-      return
+      render_banned and return
     end
     
     reset_session # session fixation attack mitigation
@@ -50,7 +49,9 @@ class SessionsController < ApplicationController
       end
     else
       abuse = Authorizable::Abuse.failed_attempt! request.remote_ip
-      if abuse.show_ban_warning?
+      if abuse.banned?
+        render_banned and return
+      elsif abuse.show_ban_warning?
         flash.now.alert = Authorizable.configuration.failed_attempts_warning.sub('%remaining_attempts_count%', abuse.remaining_attempts_count.to_s)
       else
         flash.now.alert = Authorizable.configuration.invalid_sign_in_message
@@ -87,4 +88,8 @@ class SessionsController < ApplicationController
       end
     end
     helper_method :return_to_path
+    
+    def render_banned
+      render 'banned', layout: false, status: :forbidden, formats: 'html'
+    end
 end

@@ -15,7 +15,7 @@ module Authorizable
       @inactive_account_sign_in_message = "Your account is inactive. Please find the email sent to you on sign up and follow the instructions."
       @halted_account_sign_in_message = "Your account has been halted due to inactivity and/or violation of the Terms of Use."
       @invalid_sign_in_message = "Invalid email or password."
-      @failed_attempts_warning = "Warning: After %remaining_attempts_count% more failed login attempt you'll be banned. Rember: You can easily reset your password - follow the \"I forgot my password\" link on the bottom."
+      @failed_attempts_warning = "Warning: After %remaining_attempts_count% more failed login attempts you'll be banned. Rember: You can easily reset your password - follow the \"I forgot my password\" link on the bottom."
       @ban_on_failed_attempts_count = 10
       @warn_after_failed_attempts_count = 3
     end
