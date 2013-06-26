@@ -92,7 +92,7 @@ class PasswordResetsControllerTest < ActionController::TestCase
     post :update, user: params, id: 'resetme1'
     user.reload
     assert_equal '$2a$10$fREDiaGGPkyyXBNXM/Ae/OqbgBtlJ0tNqJYGJHgZg.tAvOEpJS.gK', user.password_digest
-    assert_match /confirmation/, assigns(:user).errors[:password].first
+    assert_match /doesn't match Password/, assigns(:user).errors[:password_confirmation].first
     Timecop.return
   end
 end
