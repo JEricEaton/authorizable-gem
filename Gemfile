@@ -18,15 +18,12 @@ gem "jquery-rails"
 # For hashing passwords
 gem 'bcrypt-ruby', '~> 3.0.0'
 
-# Run tests by line number
-group :test do
-  gem 'm'
+gem 'm'
 
-  gem 'timecop'
-  
-  # Capybara for integration testing
-  gem 'capybara'
-end
+gem 'timecop'
+
+# Capybara for integration testing
+gem 'capybara'
 
 # Pry as debugger
-gem 'pry', group: [:development, :test]
+gem 'pry'
