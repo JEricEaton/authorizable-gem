@@ -5,6 +5,8 @@ source "http://rubygems.org"
 # development dependencies will be added by default to the :development group.
 gemspec
 
+gem "rails"
+
 # jquery-rails is used by the dummy application
 gem "jquery-rails"
 
@@ -17,14 +19,14 @@ gem "jquery-rails"
 gem 'bcrypt-ruby', '~> 3.0.0'
 
 # Run tests by line number
-gem 'm'
+group :test do
+  gem 'm'
 
-gem 'timecop'
-
-# Capybara for integration testing
-gem 'capybara'
+  gem 'timecop'
+  
+  # Capybara for integration testing
+  gem 'capybara'
+end
 
 # Pry as debugger
-gem 'pry', require: 'pry'
-
-gem 'strong_parameters'
+gem 'pry', group: [:development, :test]
