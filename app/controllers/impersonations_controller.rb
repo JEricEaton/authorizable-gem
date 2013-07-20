@@ -1,6 +1,4 @@
 class ImpersonationsController < ApplicationController
-  unloadable
-  
   include Authorizable::ImpersonationsHelper
   
   def create

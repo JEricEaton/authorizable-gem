@@ -1,6 +1,4 @@
 class SessionsController < ApplicationController
-  unloadable
-  
   include Authorizable::ImpersonationsHelper
   
   skip_before_filter :require_authentication, :only => [:new, :create]

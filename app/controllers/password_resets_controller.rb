@@ -1,7 +1,5 @@
 # encoding: utf-8
 class PasswordResetsController < ApplicationController
-  unloadable
-  
   skip_before_filter :require_authentication
   
   def new
