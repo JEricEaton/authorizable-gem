@@ -17,7 +17,6 @@ class SessionsController < ApplicationController
       render_banned and return
     end
     
-    reset_session # session fixation attack mitigation
     @user = Authorizable.configuration.user_model.find_by_email(session_params[:email])
     if @user.try(:authenticate, session_params[:password])
       # TODO: test inactive & halted user
