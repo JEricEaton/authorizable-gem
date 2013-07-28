@@ -18,7 +18,7 @@
     </div>
 
     <div class="submit">
-      <%= submit_tag "Sign in", class: 'btn btn-primary' %>
+      <%= submit_tag "Sign in", class: 'btn btn-primary', data: { disable_with: 'Processing...' } %>
       <%= f.hidden_field :r, value: return_to_path %>
     </div>
     
