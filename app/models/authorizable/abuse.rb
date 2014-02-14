@@ -36,6 +36,7 @@ module Authorizable
     end
     
     def unban!
+      self.failed_attempts = 0
       self.banned = false
       save!
     end
