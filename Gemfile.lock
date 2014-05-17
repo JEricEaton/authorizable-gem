@@ -2,8 +2,8 @@ PATH
   remote: .
   specs:
     authorizable (2.0.00)
-      bcrypt-ruby (~> 3.0.0)
-      rails (~> 4.0.0)
+      bcrypt-ruby (>= 3.0.0)
+      rails (>= 4.0.0)
 
 GEM
   remote: http://rubygems.org/
