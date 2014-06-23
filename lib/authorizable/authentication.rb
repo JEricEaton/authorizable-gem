@@ -120,5 +120,9 @@ module Authorizable
       r = request.url.split(request.host).second
       redirect_to sign_in_path(r: r)
     end
+    
+    def can_sign_in_as?(user)
+      admin?
+    end
   end
 end
