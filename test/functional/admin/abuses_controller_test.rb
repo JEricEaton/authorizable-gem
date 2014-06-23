@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class Admin::AbusesControllerTest < ActionController::TestCase
-  set_fixture_class :abuses => "Authorizable::Abuse"
+  set_fixture_class abuses: Authorizable::Abuse
   fixtures :abuses
   
   def setup

@@ -59,5 +59,9 @@ module Authorizable
     def password_reset_expired?
       (password_reset_sent_at + 2.hours) < Time.zone.now
     end
+    
+    def can_sign_in_as?(user)
+      admin?
+    end
   end
 end

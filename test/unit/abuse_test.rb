@@ -3,6 +3,7 @@ require 'test_helper'
 
 module Authorizable
   class AbuseTest < ActiveSupport::TestCase
+    set_fixture_class abuses: Authorizable::Abuse
     fixtures :abuses
 
     test "reset failed attempts after 1 day" do
