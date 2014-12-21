@@ -41,6 +41,8 @@ module Dummy
     # config.active_record.schema_format = :sql
     
     config.action_mailer.default_url_options = { :host => "dummy.dev" }
+    
+    config.active_support.test_order = :random
   end
 end
 
