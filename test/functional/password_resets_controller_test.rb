@@ -18,14 +18,14 @@ class PasswordResetsControllerTest < ActionController::TestCase
   
   test "create" do
     now = Time.mktime(2012, 1, 1)
-    Timecop.travel now
     params = {
       email: 'klevo@klevo.sk',
     }
-    post :create, params
+    travel_to now do
+      post :create, params
+    end
     user = users(:robert)
     assert_equal now, user.password_reset_sent_at
-    Timecop.return
     
     assert_equal 1, ActionMailer::Base.deliveries.count
     email = ActionMailer::Base.deliveries.first
@@ -48,7 +48,6 @@ class PasswordResetsControllerTest < ActionController::TestCase
   
   test "valid update" do
     now = Time.mktime(2012, 1, 1, 1, 0, 0)
-    Timecop.travel now
     user = users(:robert)
     user.update_attribute :reset_password_token, 'resetme'
     user.update_attribute :password_reset_sent_at, Time.mktime(2012, 1, 1, 0, 0, 0)
@@ -56,16 +55,16 @@ class PasswordResetsControllerTest < ActionController::TestCase
       password: 'NewRock',
       password_confirmation: 'NewRock'
     }
-    post :update, user: params, id: 'resetme'
+    travel_to now do
+      post :update, user: params, id: 'resetme'
+    end
     assert_redirected_to sign_in_path
     user.reload
     assert_not_equal '$2a$10$fREDiaGGPkyyXBNXM/Ae/OqbgBtlJ0tNqJYGJHgZg.tAvOEpJS.gK', user.password_digest
-    Timecop.return
   end
   
   test "invalid update" do
     now = Time.mktime(2012, 1, 1, 1, 0, 0)
-    Timecop.travel now
     user = users(:robert)
     user.update_attribute :reset_password_token, 'resetme1'
     user.update_attribute :password_reset_sent_at, Time.mktime(2012, 1, 1, 0, 0, 0)
@@ -73,15 +72,15 @@ class PasswordResetsControllerTest < ActionController::TestCase
       password: 'NewRock',
       password_confirmation: 'NewRock'
     }
-    assert_raise ActiveRecord::RecordNotFound do
-      post :update, user: params, id: 'resetme'
+    travel_to now do
+      assert_raise ActiveRecord::RecordNotFound do
+        post :update, user: params, id: 'resetme'
+      end
     end
-    Timecop.return
   end
   
   test "on update should give validation error if passwords does not match" do
     now = Time.mktime(2012, 1, 1, 1, 0, 0)
-    Timecop.travel now
     user = users(:robert)
     user.update_attribute :reset_password_token, 'resetme1'
     user.update_attribute :password_reset_sent_at, Time.mktime(2012, 1, 1, 0, 0, 0)
@@ -89,10 +88,11 @@ class PasswordResetsControllerTest < ActionController::TestCase
       password: 'NewRock1',
       password_confirmation: 'NewRock'
     }
-    post :update, user: params, id: 'resetme1'
+    travel_to now do
+      post :update, user: params, id: 'resetme1'
+    end
     user.reload
     assert_equal '$2a$10$fREDiaGGPkyyXBNXM/Ae/OqbgBtlJ0tNqJYGJHgZg.tAvOEpJS.gK', user.password_digest
-    assert_match /confirmation/, assigns(:user).errors[:password].first
-    Timecop.return
+    assert_match /doesn't match Password/, assigns(:user).errors[:password_confirmation].first
   end
 end

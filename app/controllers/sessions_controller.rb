@@ -1,6 +1,4 @@
 class SessionsController < ApplicationController
-  unloadable
-  
   include Authorizable::ImpersonationsHelper
   
   skip_before_filter :require_authentication, :only => [:new, :create]
@@ -19,7 +17,6 @@ class SessionsController < ApplicationController
       render_banned and return
     end
     
-    reset_session # session fixation attack mitigation
     @user = Authorizable.configuration.user_model.find_by_email(session_params[:email])
     if @user.try(:authenticate, session_params[:password])
       # TODO: test inactive & halted user
@@ -34,9 +31,17 @@ class SessionsController < ApplicationController
       
       # TODO: test remember me
       if session_params[:remember_me] == '1'
-        cookies.permanent[:auth_token] = @user.auth_token
+        cookies.permanent[:auth_token] = {
+          value: @user.auth_token,
+          secure: request.ssl?,
+          httponly: true
+        }
       else  
-        cookies[:auth_token] = @user.auth_token
+        cookies[:auth_token] = {
+          value: @user.auth_token,
+          secure: request.ssl?,
+          httponly: true
+        }
       end
       
       after_sign_in if respond_to?(:after_sign_in)

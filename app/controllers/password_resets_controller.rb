@@ -1,7 +1,5 @@
 # encoding: utf-8
 class PasswordResetsController < ApplicationController
-  unloadable
-  
   skip_before_filter :require_authentication
   
   def new
@@ -24,7 +22,7 @@ class PasswordResetsController < ApplicationController
     raise ActiveRecord::RecordNotFound if email.blank? || email.size < 3
     user = User.where(email: email).first
     if user.try(:create_password_reset_token)
-      PasswordResetsMailer.reset(user).deliver
+      PasswordResetsMailer.reset(user).deliver_later
     end
     redirect_to new_password_reset_path, notice: "Email sent with password reset instructions. Please check your email inbox."
   end

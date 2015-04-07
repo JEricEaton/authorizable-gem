@@ -46,9 +46,13 @@ module Authorizable
       @current_user ||= find_active_user_according_to_auth_cookie
 
       # Impersonation
-      if @current_user && @current_user.try(:admin?) && session[:impersonated_user_id]
+      if session[:impersonated_user_id].present?
         begin
-          @current_user = Authorizable.configuration.user_model.find session[:impersonated_user_id]
+          impersonated_user = Authorizable.configuration.user_model.find session[:impersonated_user_id].to_i
+        
+          if @current_user.try(:can_sign_in_as?, impersonated_user)
+            @current_user = impersonated_user
+          end
         rescue ActiveRecord::RecordNotFound
           session.delete :impersonated_user_id
         end

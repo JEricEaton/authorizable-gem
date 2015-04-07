@@ -5,9 +5,8 @@ Rails.application.routes.draw do
     post :stop, on: :collection
   end
 
-  # match 'sign_up'  => 'users#new', :as => 'sign_up'
-  match 'sign_in'  => 'sessions#new', :as => 'sign_in'
-  match 'sign_out' => 'sessions#destroy', :via => :delete, :as => 'sign_out'
+  get 'sign_in'  => 'sessions#new', :as => 'sign_in'
+  delete 'sign_out' => 'sessions#destroy', :as => 'sign_out'
   
   namespace :admin do
     resources :abuses do

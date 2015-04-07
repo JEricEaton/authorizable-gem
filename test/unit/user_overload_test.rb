@@ -6,8 +6,6 @@ module Authorizable
     fixtures :users
     
     class Stranger < ActiveRecord::Base
-      include ActiveModel::ForbiddenAttributesProtection
-      
       self.table_name = 'users'
       LEGACY_SALT = 'whatever'
       

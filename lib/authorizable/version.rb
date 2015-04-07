@@ -1,3 +1,3 @@
 module Authorizable
-  VERSION = "1.0.00"
+  VERSION = "2.0.00"
 end

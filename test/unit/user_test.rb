@@ -30,11 +30,11 @@ module Authorizable
       user = users(:robert)
       user.password_reset_sent_at = Time.mktime(2011, 1, 2, 10, 1)
       
-      Timecop.travel Time.mktime(2011, 1, 2, 12, 0) do
+      travel_to Time.mktime(2011, 1, 2, 12, 0) do
         assert !user.password_reset_expired?
       end
       
-      Timecop.travel Time.mktime(2011, 1, 2, 12, 2) do
+      travel_to Time.mktime(2011, 1, 2, 12, 2) do
         assert user.password_reset_expired?
       end
     end

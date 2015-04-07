@@ -43,7 +43,7 @@ class SessionsControllerTest < ActionController::TestCase
     delete :destroy
     @robert.reload
     assert_nil @robert.auth_token
-    assert_equal "auth_token=; path=/; expires=Thu, 01-Jan-1970 00:00:00 GMT", @response.header['Set-Cookie'], 'Remember me cookie gets deleted'
+    assert_equal "auth_token=; path=/; max-age=0; expires=Thu, 01 Jan 1970 00:00:00 -0000", @response.header['Set-Cookie'], 'Remember me cookie gets deleted'
   end
   
   test "10 failed sign-ins result in a ban" do

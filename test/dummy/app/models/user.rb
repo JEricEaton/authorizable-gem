@@ -1,5 +1,4 @@
 class User < ActiveRecord::Base
-  include ActiveModel::ForbiddenAttributesProtection
   include Authorizable::User  
 
   def admin?
