@@ -1,0 +1,30 @@
+robert:
+  first_name: Robert
+  last_name: Starsi
+  email: klevo@klevo.sk
+  password_digest: $2a$10$fREDiaGGPkyyXBNXM/Ae/OqbgBtlJ0tNqJYGJHgZg.tAvOEpJS.gK # antonio
+  auth_token: RobertsAuthToken
+  reset_password_token: 
+  password_reset_sent_at: 
+  role: admin
+
+andrea:
+  first_name: Andrea
+  last_name: Rossouw
+  email: andrea@desteni.co.za
+  password_digest: $2a$10$fREDiaGGPkyyXBNXM/Ae/OLeDwSiw6bWfRexiqscvjjWnQa/Opghy # andrea
+  auth_token: AndreasAuthToken
+  reset_password_token: 
+  password_reset_sent_at:
+  role: user
+
+niklas:
+  first_name: Niklas
+  last_name: Nidahl
+  email: niklas@desteni.co.za
+  password_digest: $2a$10$MPzGucE2R6uKMwjp3K6rle4zy/mrhIV6paroJggu2Cx2eL4ITOlw. # keychain
+  password_salt: $2a$10$MPzGucE2R6uKMwjp3K6rle
+  auth_token:
+  reset_password_token: 
+  password_reset_sent_at:
+  role: user
