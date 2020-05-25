@@ -13,7 +13,7 @@ Authentication for Rails.
 
 1. In your User model, include the Authorizable::User module:
 
-  class User < ActiveRecord::Base
+  class User < ApplicationRecord
     include Authorizable::User  
   end
   

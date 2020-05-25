@@ -1,11 +1,11 @@
 module Authorizable
   class Configuration
-    attr_accessor :mailer_sender, :cookie_expiration, :password_strategy, :user_model, 
-                  :unauthorized_template, :public_resources, :password_salt,
-                  :password_reset_token_column_name,
-                  :inactive_account_sign_in_message, :halted_account_sign_in_message, 
-                  :invalid_sign_in_message, :failed_attempts_warning,
-                  :ban_on_failed_attempts_count, :warn_after_failed_attempts_count
+    attr_accessor :mailer_sender, :cookie_expiration, :password_strategy, :user_model,
+      :unauthorized_template, :public_resources, :password_salt,
+      :password_reset_token_column_name,
+      :inactive_account_sign_in_message, :halted_account_sign_in_message,
+      :invalid_sign_in_message, :failed_attempts_warning,
+      :ban_on_failed_attempts_count, :warn_after_failed_attempts_count
 
     def initialize
       @mailer_sender     = 'donotreply@example.com'
@@ -21,7 +21,11 @@ module Authorizable
     end
 
     def user_model
-      @user_model || ::User
+      if defined? @user_model
+        @user_model
+      else
+        ::User
+      end
     end
   end
 

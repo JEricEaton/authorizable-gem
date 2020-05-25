@@ -1,8 +1,12 @@
-require File.expand_path('../boot', __FILE__)
+require_relative 'boot'
 
 require 'rails/all'
 
 Bundler.require
+# Require the gems listed in Gemfile, including any gems
+# you've limited to :test, :development, or :production.
+Bundler.require(*Rails.groups)
+
 require "authorizable"
 
 module Dummy
@@ -39,10 +43,9 @@ module Dummy
     # This is necessary if your schema can't be completely dumped by the schema dumper,
     # like if you have constraints or database-specific column types
     # config.active_record.schema_format = :sql
-    
+
     config.action_mailer.default_url_options = { :host => "dummy.dev" }
-    
+
     config.active_support.test_order = :random
   end
 end
-

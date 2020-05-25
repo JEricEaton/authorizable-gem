@@ -1,5 +1,5 @@
-class User < ActiveRecord::Base
-  include Authorizable::User  
+class User < ApplicationRecord
+  include Authorizable::User
 
   def admin?
     role == 'admin'

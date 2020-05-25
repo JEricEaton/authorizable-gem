@@ -2,24 +2,24 @@
 module Authorizable
   module Authentication
     extend ActiveSupport::Concern
-    
+
     ROOT_PATH = '/'
     AUTH_COOKIE = :auth_token
-  
+
     included do
       if Authorizable.configuration.nil?
         throw "Authorizable has not been configured!"
       end
-      
-      prepend_before_filter :require_authentication
+
+      prepend_before_action :require_authentication
       helper_method :current_user, :admin_route?
-      hide_action :current_user, :admin_route?, :redirect_to_sign_in, :after_sign_in
-      
+      # hide_action :current_user, :admin_route?, :redirect_to_sign_in, :after_sign_in
+
       rescue_from Authorizable::UnathorizedAccessError, with: :redirect_to_sign_in
 
       protect_namespaces :admin
     end
-  
+
     module ClassMethods
       def group_access role
         ResourceAccess.instance.role = role
@@ -35,13 +35,13 @@ module Authorizable
         puts "Authorizable public_resources controller method is deprecated. Use the new 'group_access'!"
         yield
       end
-    
+
       # deprecated
       def allow(contoller_with_actions)
         puts "Authorizable allow controller method is deprecated. Use the new 'group_access'!"
       end
     end
-  
+
     def current_user
       @current_user ||= find_active_user_according_to_auth_cookie
 
@@ -49,7 +49,7 @@ module Authorizable
       if session[:impersonated_user_id].present?
         begin
           impersonated_user = Authorizable.configuration.user_model.find session[:impersonated_user_id].to_i
-        
+
           if @current_user.try(:can_sign_in_as?, impersonated_user)
             @current_user = impersonated_user
           end
@@ -57,14 +57,14 @@ module Authorizable
           session.delete :impersonated_user_id
         end
       end
-      
+
       @current_user
     end
-    
+
     MIN_AUTH_TOKEN_LENGHT = 10
     def find_active_user_according_to_auth_cookie
       return nil if cookies[AUTH_COOKIE].blank?
-      
+
       auth_token = cookies[AUTH_COOKIE].to_s
       return nil if auth_token.size < MIN_AUTH_TOKEN_LENGHT
 
@@ -72,14 +72,14 @@ module Authorizable
       if scope.respond_to?(:active)
         scope = scope.active
       end
-      
+
       scope.where(auth_token: auth_token).first
     end
-    
+
     def reload_current_user
       @current_user = find_active_user_according_to_auth_cookie
     end
-    
+
     def redirect_to_after_sign_in
       ROOT_PATH
     end
@@ -117,8 +117,8 @@ module Authorizable
         parts.first
       else
         nil
-      end      
-    end    
+      end
+    end
 
     def redirect_to_sign_in
       r = request.url.split(request.host).second
