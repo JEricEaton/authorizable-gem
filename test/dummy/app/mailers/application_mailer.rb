@@ -1,4 +1,4 @@
-class BaseMailer < ActionMailer::Base
+class ApplicationMailer < ActionMailer::Base
   EMAIL_SUBJECT_PREFIX = '[Dummy]'
 
   default from: 'dummy@dummy.dev'

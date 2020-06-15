@@ -19,7 +19,7 @@ class PasswordResetsControllerTest < ActionController::TestCase
   test "create" do
     now = Time.mktime(2012, 1, 1)
     travel_to now do
-      post :create, email: 'klevo@klevo.sk'
+      post :create, params: { email: 'klevo@klevo.sk' }
     end
     user = users(:robert)
     assert_equal now, user.password_reset_sent_at
@@ -33,13 +33,13 @@ class PasswordResetsControllerTest < ActionController::TestCase
   test "edit with proper token" do
     user = users(:robert)
     user.update_attribute :reset_password_token, 'resetme'
-    get :edit, id: 'resetme'
+    get :edit, params: { id: 'resetme' }
     assert_response :success
   end
 
   test "edit with invalid token" do
     assert_raise ActiveRecord::RecordNotFound do
-      get :edit, id: 'resetme'
+      get :edit, params: { id: 'resetme' }
     end
   end
 
@@ -53,7 +53,7 @@ class PasswordResetsControllerTest < ActionController::TestCase
       password_confirmation: 'NewRock'
     }
     travel_to now do
-      post :update, user: params, id: 'resetme'
+      post :update, params: { user: params, id: 'resetme' }
     end
     assert_redirected_to sign_in_path
     user.reload
@@ -71,7 +71,7 @@ class PasswordResetsControllerTest < ActionController::TestCase
     }
     travel_to now do
       assert_raise ActiveRecord::RecordNotFound do
-        post :update, user: params, id: 'resetme'
+        post :update, params: { user: params, id: 'resetme'}
       end
     end
   end
@@ -86,7 +86,7 @@ class PasswordResetsControllerTest < ActionController::TestCase
       password_confirmation: 'NewRock'
     }
     travel_to now do
-      post :update, user: params, id: 'resetme1'
+      post :update, params: { user: params, id: 'resetme1' }
     end
     user.reload
     assert_equal '$2a$10$fREDiaGGPkyyXBNXM/Ae/OqbgBtlJ0tNqJYGJHgZg.tAvOEpJS.gK', user.password_digest

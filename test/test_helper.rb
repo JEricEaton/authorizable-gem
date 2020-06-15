@@ -5,7 +5,8 @@ require File.expand_path("../dummy/config/environment.rb",  __FILE__)
 require "rails/test_help"
 
 require 'capybara/rails'
-
+require 'rails-controller-testing'
+Rails::Controller::Testing.install
 Rails.backtrace_cleaner.remove_silencers!
 
 # Load support files

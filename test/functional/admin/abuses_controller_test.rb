@@ -21,7 +21,7 @@ class Admin::AbusesControllerTest < ActionController::TestCase
   test "unban" do
     assert Authorizable::Abuse.ip_banned?("111.11.11.11")
     
-    post :unban, id: abuses(:john).id
+    post :unban, params: { id: abuses(:john).id }
     assert_response :redirect
     assert_redirected_to [:admin, :abuses]
     
