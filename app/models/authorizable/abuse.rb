@@ -11,9 +11,7 @@ module Authorizable
     def self.failed_attempt!(ip_address)
       ip = where(ip_address: ip_address).first
       if ip
-        unless (ip.updated_at + 1.day) > Time.zone.now
-          ip.failed_attempts = 0
-        end
+        ip.failed_attempts = 0 unless (ip.updated_at + 1.day) > Time.zone.now
 
         ip.failed_attempts += 1
       else
@@ -24,9 +22,7 @@ module Authorizable
         end
       end
 
-      if ip.failed_attempts >= Authorizable.configuration.ban_on_failed_attempts_count
-        ip.banned = true
-      end
+      ip.banned = true if ip.failed_attempts >= Authorizable.configuration.ban_on_failed_attempts_count
 
       if ip.save
         ip

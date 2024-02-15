@@ -7,9 +7,7 @@ module Authorizable
     AUTH_COOKIE = :auth_token
 
     included do
-      if Authorizable.configuration.nil?
-        throw "Authorizable has not been configured!"
-      end
+      throw 'Authorizable has not been configured!' if Authorizable.configuration.nil?
 
       prepend_before_action :require_authentication
       helper_method :current_user, :admin_route?
@@ -21,7 +19,7 @@ module Authorizable
     end
 
     module ClassMethods
-      def group_access role
+      def group_access(role)
         ResourceAccess.instance.role = role
         yield ResourceAccess.instance
       end
@@ -37,7 +35,7 @@ module Authorizable
       end
 
       # deprecated
-      def allow(contoller_with_actions)
+      def allow(_contoller_with_actions)
         puts "Authorizable allow controller method is deprecated. Use the new 'group_access'!"
       end
     end
@@ -50,9 +48,7 @@ module Authorizable
         begin
           impersonated_user = Authorizable.configuration.user_model.find session[:impersonated_user_id].to_i
 
-          if @current_user.try(:can_sign_in_as?, impersonated_user)
-            @current_user = impersonated_user
-          end
+          @current_user = impersonated_user if @current_user.try(:can_sign_in_as?, impersonated_user)
         rescue ActiveRecord::RecordNotFound
           session.delete :impersonated_user_id
         end
@@ -69,9 +65,7 @@ module Authorizable
       return nil if auth_token.size < MIN_AUTH_TOKEN_LENGHT
 
       scope = Authorizable.configuration.user_model
-      if scope.respond_to?(:active)
-        scope = scope.active
-      end
+      scope = scope.active if scope.respond_to?(:active)
 
       scope.where(auth_token: auth_token).first
     end
@@ -108,16 +102,14 @@ module Authorizable
     end
 
     def admin_route?
-      params[:controller].index('admin/') == 0
+      params[:controller].index('admin/').zero?
     end
 
     def routing_namespace
       parts = params[:controller].split '/'
-      if parts.size > 1
-        parts.first
-      else
-        nil
-      end
+      return unless parts.size > 1
+
+      parts.first
     end
 
     def redirect_to_sign_in

@@ -1,6 +1,6 @@
 module Authorizable
   require 'singleton'
-  
+
   class ResourceAccess
     include Singleton
     attr_accessor :role
@@ -10,15 +10,15 @@ module Authorizable
       @protected_namespaces = []
     end
 
-    def allow controller_with_actions
+    def allow(controller_with_actions)
       @role_based_resources.allow role, controller_with_actions
     end
 
-    def can_access? role, controller, action = nil
+    def can_access?(role, controller, action = nil)
       @role_based_resources.can_access? role, controller, action
     end
 
-    def self.allowed? roles, controller, action = nil
+    def self.allowed?(roles, controller, action = nil)
       roles = roles.is_a?(Array) ? roles : [roles]
       roles.each do |role|
         return true if instance.can_access? role, controller, action
@@ -26,17 +26,17 @@ module Authorizable
       false
     end
 
-    def protect_namespace namespace
+    def protect_namespace(namespace)
       namespace = :__no_namespace__ if namespace.nil?
       @protected_namespaces << namespace.to_sym unless protected_namespace? namespace
     end
 
-    def protected_namespace? namespace
+    def protected_namespace?(namespace)
       namespace = :__no_namespace__ if namespace.nil?
       @protected_namespaces.include? namespace.to_sym
     end
 
-    def self.protected_namespace? namespace
+    def self.protected_namespace?(namespace)
       instance.protected_namespace? namespace
     end
   end

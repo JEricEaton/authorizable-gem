@@ -2,9 +2,11 @@
 <html>
 <head>
   <title>Authorizable</title>
-  <%= stylesheet_link_tag    "authorizable/application", :media => "all" %>
-  <%= javascript_include_tag "authorizable/application" %>
-  <%= csrf_meta_tags %>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag 'authorizable/application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_pack_tag 'authorizable/application', 'data-turbolinks-track': 'reload' %>
 </head>
 <body>
 

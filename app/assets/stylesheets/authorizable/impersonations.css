@@ -4,7 +4,7 @@
   font-size: 100%;
   color: #fff;
   border-bottom: 1px solid #571b50;
-  
+
   a {
     background: #74336c;
     display: block;
@@ -12,7 +12,7 @@
     width: 100%;
     color: #fff;
     padding: 5px;
-    
+
     &:hover {
       text-decoration: line-through;
       background: #74336c;
