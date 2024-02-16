@@ -102,7 +102,7 @@ module Authorizable
     end
 
     def admin_route?
-      params[:controller].index('admin/').zero?
+      params[:controller].include?('admin/')
     end
 
     def routing_namespace
