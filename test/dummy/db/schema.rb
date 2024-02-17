@@ -10,14 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_02_16_152910) do
-
+ActiveRecord::Schema[7.0].define(version: 2024_02_17_155514) do
   create_table "abuses", charset: "utf8mb3", force: :cascade do |t|
     t.string "ip_address"
     t.integer "failed_attempts"
     t.boolean "banned"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["banned"], name: "index_abuses_on_banned"
     t.index ["ip_address"], name: "index_abuses_on_ip_address"
   end
@@ -30,9 +29,9 @@ ActiveRecord::Schema.define(version: 2024_02_16_152910) do
     t.string "password_salt"
     t.string "auth_token"
     t.string "reset_password_token"
-    t.datetime "password_reset_sent_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "password_reset_sent_at", precision: nil
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "role"
     t.boolean "product_manager", default: false
   end
