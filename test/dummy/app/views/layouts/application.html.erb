@@ -2,36 +2,31 @@
 <html>
   <head>
     <title>Tester6061</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-
-    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <meta charset="utf-8">
   </head>
-<body>
-  
-<div id="current_user">
-  <p>Current user: <pre><%= current_user.inspect %></pre></p>
-
-  <ul>
-    <li><%= link_to 'Sign in', :sign_in %></li>
-    <li><%= link_to 'Sign out', sign_out_path, method: :delete %></li>
-  </ul>
-</div>
-
-<hr>
-
-<% flash.each do |name, msg| %>
-  <%= content_tag :div, msg, :class => "flash_#{name} flash" %>
-<% end %>
-
-<%= yield %>
-
-<hr>
-
-<h4>Params:</h4>
-<p>
-  <pre><%= params %></pre>
-</p>
-
-</body>
+  <body>
+    <div id="current_user">
+      <p>Current user:
+        <pre><%= current_user.inspect %></pre>
+      </p>
+      <ul>
+        <li><%= link_to 'Sign in', :sign_in %></li>
+        <li><%= link_to 'Sign out', sign_out_path, method: :delete %></li>
+      </ul>
+    </div>
+    <hr>
+    <% flash.each do |name, msg| %>
+      <%= content_tag :div, msg, :class => "flash_#{name} flash" %>
+    <% end %>
+    <%= yield %>
+    <hr>
+    <h4>Params:</h4>
+    <p>
+      <pre><%= params %></pre>
+    </p>
+  </body>
 </html>

@@ -1,16 +1,14 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Authorizable</title>
+  <head>
+    <title>Authorizable</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-
-    <%= stylesheet_link_tag 'authorizable/application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_pack_tag 'authorizable/application', 'data-turbolinks-track': 'reload' %>
-</head>
-<body>
-
-<%= yield %>
-
-</body>
+    <%= stylesheet_link_tag "authorizable/application", "data-turbo-track": "reload" %>
+    <meta charset="utf-8">
+  </head>
+  <body>
+    <%= yield %>
+  </body>
 </html>
