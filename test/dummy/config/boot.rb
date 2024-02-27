@@ -1,5 +1,3 @@
-require 'rubygems'
-
 gemfile = File.expand_path('../../../Gemfile', __dir__)
 
 if File.exist?(gemfile)
