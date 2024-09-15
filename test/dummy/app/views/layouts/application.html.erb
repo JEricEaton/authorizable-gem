@@ -15,7 +15,7 @@
       </p>
       <ul>
         <li><%= link_to 'Sign in', :sign_in %></li>
-        <li><%= link_to 'Sign out', sign_out_path, method: :delete %></li>
+        <li><%= button_to 'Sign out', sign_out_path, data: { turbo_method: :delete } %></li>
       </ul>
     </div>
     <hr>
