@@ -1,5 +1,5 @@
 <% if session[:impersonated_user_id] && current_user %>
   <div id="impersonating">
-     <%= button_to sanitize("Signed in as <strong>#{current_user.name}</strong>. Click here to cancel"), stop_impersonations_path %>
+    <%= link_to sanitize("Signed in as <strong>#{current_user.name}</strong>. Click here to cancel"), stop_impersonations_path, data: { turbo_method: :post } %>
   </div>
 <% end %>
