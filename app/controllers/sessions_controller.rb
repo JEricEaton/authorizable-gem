@@ -17,11 +17,11 @@ class SessionsController < ApplicationController
     if @user.try(:authenticate, session_params[:password])
       # TODO: test inactive & halted user
       if @user.respond_to?(:inactive?) && @user.inactive?
-        flash.now.alert = Authorizable.configuration.inactive_account_sign_in_message
-        render 'new' and return
+        flash[:alert] = Authorizable.configuration.inactive_account_sign_in_message
+        render :new, status: :unprocessable_entity
       elsif @user.respond_to?(:halted?) && @user.halted?
-        flash.now.alert = Authorizable.configuration.halted_account_sign_in_message
-        render 'new' and return
+        flash[:alert] = Authorizable.configuration.halted_account_sign_in_message
+        render :new, status: :unprocessable_entity
       end
       @user.regenerate_auth_token
 
@@ -48,13 +48,13 @@ class SessionsController < ApplicationController
       if abuse.banned?
         render_banned and return
       elsif abuse.show_ban_warning?
-        flash.now.alert = Authorizable.configuration.failed_attempts_warning.sub('%remaining_attempts_count%',
-                                                                                 abuse.remaining_attempts_count.to_s)
+        flash[:alert] = Authorizable.configuration.failed_attempts_warning.sub('%remaining_attempts_count%',
+                                                                               abuse.remaining_attempts_count.to_s)
       else
-        flash.now.alert = Authorizable.configuration.invalid_sign_in_message
+        flash[:alert] = Authorizable.configuration.invalid_sign_in_message
       end
 
-      render 'new'
+      render :new, status: :unprocessable_entity
     end
   end
 

@@ -67,7 +67,7 @@ module Authorizable
       scope = Authorizable.configuration.user_model
       scope = scope.active if scope.respond_to?(:active)
 
-      scope.where(auth_token: auth_token).first
+      scope.where(auth_token:).first
     end
 
     def reload_current_user
@@ -114,7 +114,7 @@ module Authorizable
 
     def redirect_to_sign_in
       r = request.url.split(request.host).second
-      redirect_to sign_in_path(r: r)
+      redirect_to sign_in_path(r:)
     end
   end
 end
