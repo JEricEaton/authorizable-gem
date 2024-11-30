@@ -17,7 +17,6 @@ Gem::Specification.new do |s|
   s.test_files = Dir['test/**/*']
 
   s.add_dependency 'bcrypt', '~> 3.1.7'
-  s.add_dependency 'dartsass-sprockets'
   s.add_dependency 'rails', "~> 7.2.0"
 
   s.add_development_dependency 'capybara'
