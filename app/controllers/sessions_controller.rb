@@ -27,16 +27,14 @@ class SessionsController < ApplicationController
 
       # TODO: test remember me
       if session_params[:remember_me] == '1'
-        cookies.permanent[:auth_token] = {
+        cookies.encrypted.permanent[:auth_token] = {
           value: @user.auth_token,
-          secure: request.ssl?,
-          httponly: true
+          secure: Rails.env.production?
         }
       else
-        cookies[:auth_token] = {
+        cookies.encrypted[:auth_token] = {
           value: @user.auth_token,
-          secure: request.ssl?,
-          httponly: true
+          secure: Rails.env.production?
         }
       end
 

@@ -3,12 +3,14 @@ require 'test_helper'
 class Admin::AbusesControllerTest < ActionController::TestCase
   set_fixture_class abuses: Authorizable::Abuse
   fixtures :abuses
-  
+
   def setup
-    @request.cookies[:auth_token] = 'RobertsAuthToken'
+    @my_cookies = ActionDispatch::Request.new(Rails.application.env_config.deep_dup).cookie_jar
+    @my_cookies.encrypted[:auth_token] = 'RobertsAuthToken'
+    cookies[:auth_token] = @my_cookies[:auth_token]
     super
   end
-  
+
   test "index" do
     get :index
     assert_response :success
@@ -20,11 +22,11 @@ class Admin::AbusesControllerTest < ActionController::TestCase
 
   test "unban" do
     assert Authorizable::Abuse.ip_banned?("111.11.11.11")
-    
+
     post :unban, params: { id: abuses(:john).id }
     assert_response :redirect
     assert_redirected_to [:admin, :abuses]
-    
+
     # binding.pry
     refute Authorizable::Abuse.ip_banned?("111.11.11.11")
   end

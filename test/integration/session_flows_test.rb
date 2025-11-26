@@ -23,7 +23,7 @@ class SessionFlowsTest < ActionDispatch::IntegrationTest
 
     # Sign out
     click_on 'Sign out'
-    assert_equal sign_in_url, current_url
+    assert_equal sign_out_url, current_url
   end
 
   test "reset forgotten password, then sign in with the new one" do

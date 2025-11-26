@@ -23,7 +23,7 @@ class SessionsControllerTest < ActionController::TestCase
 
   test 'failed sign in' do
     post :create, params: { session: { email: 'klevo@klevo.sk', password: 'invalid' } }
-    assert_response :success
+    assert_response :unprocessable_entity
     assert_equal @robert.auth_token, 'RobertsAuthToken', 'auth_token has not been regenerated'
     assert_match(/invalid/i, flash[:alert])
   end
@@ -39,7 +39,9 @@ class SessionsControllerTest < ActionController::TestCase
   end
 
   test 'sign out - resets auth_token field and removes cookie' do
-    @request.cookies[:auth_token] = 'RobertsAuthToken'
+    @my_cookies = ActionDispatch::Request.new(Rails.application.env_config.deep_dup).cookie_jar
+    @my_cookies.encrypted[:auth_token] = 'RobertsAuthToken' # auth as Robert
+    cookies[:auth_token] = @my_cookies[:auth_token]
     delete :destroy
     @robert.reload
     assert_nil @robert.auth_token
@@ -57,7 +59,7 @@ class SessionsControllerTest < ActionController::TestCase
         assert_response :forbidden
         assert_template :banned
       else
-        assert_response :success
+        assert_response :unprocessable_entity
         assert_template :new
 
         if attempts >= Authorizable.configuration.warn_after_failed_attempts_count
@@ -87,14 +89,16 @@ class SessionsControllerTest < ActionController::TestCase
 
   test 'if impersonating, sign out stops the impersonation' do
     @andrea = users(:andrea)
+    @my_cookies = ActionDispatch::Request.new(Rails.application.env_config.deep_dup).cookie_jar
+    @my_cookies.encrypted[:auth_token] = 'RobertsAuthToken' # auth as Robert
+    cookies[:auth_token] = @my_cookies[:auth_token]
 
-    @request.cookies[:auth_token] = 'RobertsAuthToken' # auth as Robert
     session[:impersonated_user_id] = @andrea.id
 
     delete :destroy
 
     @robert.reload
     assert_equal 'RobertsAuthToken', @robert.auth_token
-    # assert_equal 'RobertsAuthToken', @request.cookies[:auth_token]
+    assert_equal 'RobertsAuthToken', cookies.encrypted[:auth_token]
   end
 end
