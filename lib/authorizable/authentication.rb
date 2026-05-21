@@ -10,7 +10,6 @@ module Authorizable
 
       prepend_before_action :require_authentication
       helper_method :current_user, :admin_route?
-      # hide_action :current_user, :admin_route?, :redirect_to_sign_in, :after_sign_in
 
       rescue_from Authorizable::UnauthorizedAccessError, with: :redirect_to_sign_in
 
@@ -23,7 +22,7 @@ module Authorizable
         yield ResourceAccess.instance
       end
 
-      def protect_namespaces *namespaces
+      def protect_namespaces(*namespaces)
         namespaces.each { |n| ResourceAccess.instance.protect_namespace n }
       end
 
@@ -105,7 +104,7 @@ module Authorizable
 
     def redirect_to_sign_in
       r = request.url.split(request.host).second
-      redirect_to sign_in_path(r:)
+      redirect_to sign_in_path(r: r)
     end
   end
 end

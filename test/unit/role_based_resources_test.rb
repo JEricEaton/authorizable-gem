@@ -1,4 +1,3 @@
-# encoding: UTF-8
 require 'test_helper'
 
 module Authorizable
@@ -8,8 +7,8 @@ module Authorizable
 
       resources = RoleBasedResources.new
       resources.allow :public, 'products'
-      resources.allow :public, 'users' => %w(index) 
-      resources.allow :product_manager, 'admin/products' => %w(index show)
+      resources.allow :public, 'users' => %w[index]
+      resources.allow :product_manager, 'admin/products' => %w[index show]
 
       assert resources.can_access?(:public, 'products')
       assert resources.can_access?(:public, 'products', 'index')

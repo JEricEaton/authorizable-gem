@@ -9,14 +9,17 @@
 # And be sure to use new-style password hashing:
 #   https://dev.mysql.com/doc/refman/5.7/en/password-hashing.html
 #
-development: &default
+default: &default
   adapter: mysql2
   encoding: utf8mb4
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  database: authorizable_dummy
-  username: <%= ENV['LOCAL_DB_USER'] %>
-  password: <%= ENV['LOCAL_DB_PASS'] %>
+  username: <%= ENV.fetch("LOCAL_DB_USER", 'development') %>
+  password: <%= ENV.fetch("LOCAL_DB_PASS", 'development')  %>
   socket: /var/run/mysqld/mysqld.sock
+
+development:
+  <<: *default
+  database: authorizable_dummy
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
