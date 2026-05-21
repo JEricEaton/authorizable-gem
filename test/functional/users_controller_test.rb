@@ -14,8 +14,8 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test "blank remember me cookie does not authorize anyone" do
-    @my_cookies.encrypted[:auth_token] = ''
-    cookies[:auth_token] = @my_cookies[:auth_token]
+    @my_cookies.encrypted[:user] = ''
+    cookies[:user] = @my_cookies[:user]
     get :edit, params: { id: users(:robert) }
     assert_response :redirect
     assert_nil @controller.current_user
@@ -23,17 +23,17 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test "spaces filled remember me cookie does not authorize anyone" do
-    @my_cookies.encrypted[:auth_token] = '       '
-    cookies[:auth_token] = @my_cookies[:auth_token]
+    @my_cookies.encrypted[:user] = '       '
+    cookies[:user] = @my_cookies[:user]
     get :edit, params: { id: users(:robert) }
     assert_response :redirect
     assert_nil @controller.current_user
     assert_nil assigns(:current_user)
   end
 
-  test "remember me cookie carrying the auth_token present in the database authorizes the corresponding user" do
-    @my_cookies.encrypted[:auth_token] = 'RobertsAuthToken'
-    cookies[:auth_token] = @my_cookies[:auth_token]
+  test "remember me cookie carrying the id present in the database authorizes the corresponding user" do
+    @my_cookies.encrypted[:user] = users(:robert).id
+    cookies[:user] = @my_cookies[:user]
     get :edit, params: { id: users(:robert) }
     assert_response :success
     assert @controller.current_user
