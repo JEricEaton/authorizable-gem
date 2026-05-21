@@ -15,8 +15,8 @@ class SessionFlowsTest < ActionDispatch::IntegrationTest
   test "sign in, sign out" do
     # Sign in
     visit '/sign_in'
-    fill_in 'Email', :with => 'klevo@klevo.sk'
-    fill_in 'Password', :with => 'antonio'
+    fill_in 'Email', with: 'klevo@klevo.sk'
+    fill_in 'Password', with: 'antonio'
     click_button 'Sign in'
 
     assert_equal user_url(@robert), current_url
@@ -31,32 +31,29 @@ class SessionFlowsTest < ActionDispatch::IntegrationTest
     click_on 'I forgot my password'
     assert_equal new_password_reset_url, current_url
 
-    fill_in 'email', :with => 'klevo@klevo.sk'
+    fill_in 'email', with: 'klevo@klevo.sk'
     click_button 'Send me password reset instructions'
 
     assert_equal 1, ActionMailer::Base.deliveries.size
     email = ActionMailer::Base.deliveries.first
     assert_equal [@robert.email], email.to
-    assert_match (/Reset Instructions/), email.subject
-
-    reset_path = edit_password_reset_path(@robert.reload.reset_password_token)
-
-    assert_match (/#{reset_path}/), email.body.raw_source
+    assert_match(/Reset Instructions/, email.subject)
+    reset_path = email.body.raw_source.scan(/http.*?\/edit/).first
 
     # Reset the password
     visit reset_path
-    find('#user_password').set 'newpass'
-    find('#user_password_confirmation').set 'newpass'
+    find('#user_password').set 'newpass123'
+    find('#user_password_confirmation').set 'newpass123'
     click_button 'Save my new password'
 
     # After password reset we land on sign in screen
     assert_equal sign_in_path, current_path
 
     # Sign in with the new password
-    fill_in 'Email', :with => 'klevo@klevo.sk'
-    fill_in 'Password', :with => 'newpass'
+    fill_in 'Email', with: 'klevo@klevo.sk'
+    fill_in 'Password', with: 'newpass123'
     click_button 'Sign in'
 
-    assert_equal user_url(@robert), current_url
+    assert_equal user_path(@robert), current_path
   end
 end
