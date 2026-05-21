@@ -3,10 +3,6 @@ require 'test_helper'
 class PasswordResetsControllerTest < ActionController::TestCase
   fixtures :users
 
-  def setup
-    Authorizable.configuration.password_salt = "$2a$10$fREDiaGGPkyyXBNXM/Ae/O"
-  end
-
   def teardown
     ActionMailer::Base.deliveries = []
   end
@@ -16,80 +12,82 @@ class PasswordResetsControllerTest < ActionController::TestCase
     assert :success
   end
 
-  test "create" do
-    now = Time.mktime(2012, 1, 1)
-    travel_to now do
-      post :create, params: { email: 'klevo@klevo.sk' }
-    end
-    user = users(:robert)
-    assert_equal now, user.password_reset_sent_at
-
+  test "create with existing email" do
+    post :create, params: { email: 'klevo@klevo.sk' }
     assert_equal 1, ActionMailer::Base.deliveries.count
     email = ActionMailer::Base.deliveries.first
     assert_equal [users(:robert).email], email.to
     assert_match "Reset Instructions", email.subject
+    reset_path = email.body.raw_source.scan(/http.*?\/edit/).first
+    assert reset_path.present?
+    assert_redirected_to new_password_reset_path
+    assert_equal 'Email sent with password reset instructions. Please check your email inbox.', flash[:notice]
+  end
+
+  test "create non existent email" do
+    post :create, params: { email: 'notfound@example.com' }
+    assert_equal 0, ActionMailer::Base.deliveries.count
+    assert_redirected_to new_password_reset_path
+    assert_equal 'Email address not found, please try again.', flash[:alert]
   end
 
   test "edit with proper token" do
     user = users(:robert)
-    user.update_attribute :reset_password_token, 'resetme'
-    get :edit, params: { id: 'resetme' }
+    token = user.password_reset_token
+    get :edit, params: { id: token }
     assert_response :success
   end
 
-  test "edit with invalid token" do
-    assert_raise ActiveRecord::RecordNotFound do
-      get :edit, params: { id: 'resetme' }
-    end
-  end
-
   test "valid update" do
-    now = Time.mktime(2012, 1, 1, 1, 0, 0)
     user = users(:robert)
-    user.update_attribute :reset_password_token, 'resetme'
-    user.update_attribute :password_reset_sent_at, Time.mktime(2012, 1, 1, 0, 0, 0)
+    token = user.password_reset_token
     params = {
-      password: 'NewRock',
-      password_confirmation: 'NewRock'
+      password: 'NewRock123',
+      password_confirmation: 'NewRock123'
     }
-    travel_to now do
-      post :update, params: { user: params, id: 'resetme' }
-    end
+    post :update, params: { user: params, id: token }
     assert_redirected_to sign_in_path
     user.reload
-    assert_not_equal '$2a$10$fREDiaGGPkyyXBNXM/Ae/OqbgBtlJ0tNqJYGJHgZg.tAvOEpJS.gK', user.password_digest
+    assert user.authenticate("NewRock123")
   end
 
   test "invalid update" do
-    now = Time.mktime(2012, 1, 1, 1, 0, 0)
-    user = users(:robert)
-    user.update_attribute :reset_password_token, 'resetme1'
-    user.update_attribute :password_reset_sent_at, Time.mktime(2012, 1, 1, 0, 0, 0)
     params = {
       password: 'NewRock',
       password_confirmation: 'NewRock'
     }
-    travel_to now do
-      assert_raise ActiveRecord::RecordNotFound do
-        post :update, params: { user: params, id: 'resetme'}
-      end
-    end
+
+    post :update, params: { user: params, id: 'resetme' }
+    assert_redirected_to new_password_reset_path
+    assert_equal 'Invalid Reset token, please try again!', flash[:alert]
   end
 
   test "on update should give validation error if passwords does not match" do
-    now = Time.mktime(2012, 1, 1, 1, 0, 0)
     user = users(:robert)
-    user.update_attribute :reset_password_token, 'resetme1'
-    user.update_attribute :password_reset_sent_at, Time.mktime(2012, 1, 1, 0, 0, 0)
+    token = user.password_reset_token
     params = {
       password: 'NewRock1',
       password_confirmation: 'NewRock'
     }
-    travel_to now do
-      post :update, params: { user: params, id: 'resetme1' }
-    end
+    post :update, params: { user: params, id: token }
     user.reload
-    assert_equal '$2a$10$fREDiaGGPkyyXBNXM/Ae/OqbgBtlJ0tNqJYGJHgZg.tAvOEpJS.gK', user.password_digest
     assert_match "doesn't match Password", assigns(:user).errors[:password_confirmation].first
+    assert user.authenticate("antonio")
+  end
+
+  test "Password reset token expired" do
+    user = users(:robert)
+    token = user.password_reset_token
+    params = {
+      password: 'NewRock1',
+      password_confirmation: 'NewRock1'
+    }
+    travel_to 20.minutes.from_now do
+      post :update, params: { user: params, id: token }
+      user.reload
+      assert_redirected_to new_password_reset_path
+      assert_equal 'Invalid Reset token, please try again!', flash[:alert]
+      assert user.authenticate("antonio")
+    end
   end
 end
