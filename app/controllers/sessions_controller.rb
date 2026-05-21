@@ -23,20 +23,26 @@ class SessionsController < ApplicationController
         flash[:alert] = Authorizable.configuration.halted_account_sign_in_message
         render :new, status: :unprocessable_entity
       end
-      @user.regenerate_auth_token
 
       # TODO: test remember me
       if session_params[:remember_me] == '1'
-        cookies.encrypted[:auth_token] = {
-          value: @user.auth_token,
+        cookies.encrypted[:user] = {
+          value: @user.id,
           secure: Rails.env.production?,
           expires: 1.week.from_now
         }
       else
-        cookies.encrypted[:auth_token] = {
-          value: @user.auth_token,
+        cookies.encrypted[:user] = {
+          value: @user.id,
           secure: Rails.env.production?
         }
+      end
+
+      if Authorizable.configuration.deprecated_password_salt &&
+          @user.password_digest == BCrypt::Engine.hash_secret(session_params[:password], Authorizable.configuration.deprecated_password_salt)
+         # force rehash using has_secure_password
+        @user.password = session_params[:password]
+        @user.save(validate: false)
       end
 
       after_sign_in if respond_to?(:after_sign_in)
@@ -60,8 +66,7 @@ class SessionsController < ApplicationController
   def destroy
     stop_impersonating and return if impersonating?
 
-    cookies.delete(:auth_token)
-    current_user.update_attribute :auth_token, nil
+    cookies.delete(:user)
     redirect_to sign_in_path, notice: "You've signed out."
   end
 

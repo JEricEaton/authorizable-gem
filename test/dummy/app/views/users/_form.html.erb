@@ -23,22 +23,6 @@
     <%= f.label :email %><br />
     <%= f.text_field :email %>
   </div>
-  <div class="field">
-    <%= f.label :password_digest %><br />
-    <%= f.text_field :password_digest %>
-  </div>
-  <div class="field">
-    <%= f.label :auth_token %><br />
-    <%= f.text_field :auth_token %>
-  </div>
-  <div class="field">
-    <%= f.label Authorizable.configuration.password_reset_token_column_name.to_sym %><br />
-    <%= f.text_field Authorizable.configuration.password_reset_token_column_name.to_sym %>
-  </div>
-  <div class="field">
-    <%= f.label :password_reset_sent_at %><br />
-    <%= f.datetime_select :password_reset_sent_at %>
-  </div>
   <div class="actions">
     <%= f.submit %>
   </div>

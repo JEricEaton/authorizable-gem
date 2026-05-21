@@ -4,7 +4,6 @@ module Authorizable
     extend ActiveSupport::Concern
 
     ROOT_PATH = '/'
-    AUTH_COOKIE = :auth_token
 
     included do
       throw 'Authorizable has not been configured!' if Authorizable.configuration.nil?
@@ -41,7 +40,7 @@ module Authorizable
     end
 
     def current_user
-      @current_user ||= find_active_user_according_to_auth_cookie
+      @current_user ||= find_active_user_using_enc_cookie
 
       # Impersonation
       if session[:impersonated_user_id].present?
@@ -57,21 +56,17 @@ module Authorizable
       @current_user
     end
 
-    MIN_AUTH_TOKEN_LENGTH = 10
-    def find_active_user_according_to_auth_cookie
-      return nil if cookies.encrypted[AUTH_COOKIE].blank?
-
-      auth_token = cookies.encrypted[AUTH_COOKIE].to_s
-      return nil if auth_token.size < MIN_AUTH_TOKEN_LENGTH
+    def find_active_user_using_enc_cookie
+      return nil if cookies.encrypted[:user].blank?
 
       scope = Authorizable.configuration.user_model
       scope = scope.active if scope.respond_to?(:active)
 
-      scope.where(auth_token:).first
+      scope.find(cookies.encrypted[:user])
     end
 
     def reload_current_user
-      @current_user = find_active_user_according_to_auth_cookie
+      @current_user = find_active_user_using_enc_cookie
     end
 
     def redirect_to_after_sign_in

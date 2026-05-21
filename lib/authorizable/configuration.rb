@@ -1,8 +1,7 @@
 module Authorizable
   class Configuration
-    attr_accessor :mailer_sender, :cookie_expiration, :password_strategy, :user_model,
-                  :unauthorized_template, :public_resources, :password_salt,
-                  :password_reset_token_column_name,
+    attr_accessor :mailer_sender, :cookie_expiration, :user_model,
+                  :unauthorized_template, :public_resources, :deprecated_password_salt,
                   :inactive_account_sign_in_message, :halted_account_sign_in_message,
                   :invalid_sign_in_message, :failed_attempts_warning,
                   :ban_on_failed_attempts_count, :warn_after_failed_attempts_count
@@ -10,8 +9,6 @@ module Authorizable
     def initialize
       @mailer_sender = 'donotreply@example.com'
       @unauthorized_template = 'unauthorized'
-      @password_strategy = BcryptHashSecretStrategy
-      @password_reset_token_column_name = 'reset_password_token'
       @inactive_account_sign_in_message = 'Your account is inactive. Please find the email sent to you on sign up and follow the instructions.'
       @halted_account_sign_in_message = 'Your account has been halted due to inactivity and/or violation of the Terms of Use.'
       @invalid_sign_in_message = 'Invalid email or password.'
@@ -39,7 +36,6 @@ module Authorizable
   # @example
   #   Authorizable.configure do |config|
   #     config.mailer_sender     = 'me@example.com'
-  #     config.password_strategy = MyPasswordStrategy
   #     config.user_model        = MyNamespace::MyUser
   #   end
   def self.configure
