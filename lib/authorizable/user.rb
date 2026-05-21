@@ -11,7 +11,7 @@ module Authorizable
       validates :email,
                 presence: true,
                 uniqueness: true,
-                email_format: true
+                format: { with: URI::MailTo::EMAIL_REGEXP }
       validates :password,
                 presence: true,
                 confirmation: true,
