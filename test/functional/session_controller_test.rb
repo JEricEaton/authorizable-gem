@@ -4,7 +4,6 @@ class SessionsControllerTest < ActionController::TestCase
   fixtures :users
 
   def setup
-    Authorizable.configuration.password_salt = '$2a$10$fREDiaGGPkyyXBNXM/Ae/O'
     @robert = users(:robert)
   end
 
@@ -13,18 +12,14 @@ class SessionsControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test 'succesful sign in with email and password' do
+  test 'successful sign in with email and password' do
     post :create, params: { session: { email: 'klevo@klevo.sk', password: 'antonio' } }
     assert_redirected_to @robert # Defined in dummy's ApplicationController#redirect_to_after_sign_in
-
-    @robert.reload
-    assert_not_equal @robert.auth_token, 'RobertsAuthToken', 'auth_token has been regenerated'
   end
 
   test 'failed sign in' do
     post :create, params: { session: { email: 'klevo@klevo.sk', password: 'invalid' } }
     assert_response :unprocessable_entity
-    assert_equal @robert.auth_token, 'RobertsAuthToken', 'auth_token has not been regenerated'
     assert_match(/invalid/i, flash[:alert])
   end
 
@@ -38,14 +33,12 @@ class SessionsControllerTest < ActionController::TestCase
     assert_redirected_to @robert
   end
 
-  test 'sign out - resets auth_token field and removes cookie' do
+  test 'sign out - removes cookie' do
     @my_cookies = ActionDispatch::Request.new(Rails.application.env_config.deep_dup).cookie_jar
-    @my_cookies.encrypted[:auth_token] = 'RobertsAuthToken' # auth as Robert
-    cookies[:auth_token] = @my_cookies[:auth_token]
+    @my_cookies.encrypted[:user] = @robert.id # auth as Robert
+    cookies[:user] = @my_cookies[:user]
     delete :destroy
-    @robert.reload
-    assert_nil @robert.auth_token
-    assert @response.header['Set-Cookie'].include?('auth_token=; path=/; max-age=0; expires=Thu'),
+    assert @response.header['Set-Cookie'].include?('user=; path=/; max-age=0; expires=Thu'),
            'Remember me cookie gets deleted'
   end
 
@@ -90,15 +83,15 @@ class SessionsControllerTest < ActionController::TestCase
   test 'if impersonating, sign out stops the impersonation' do
     @andrea = users(:andrea)
     @my_cookies = ActionDispatch::Request.new(Rails.application.env_config.deep_dup).cookie_jar
-    @my_cookies.encrypted[:auth_token] = 'RobertsAuthToken' # auth as Robert
-    cookies[:auth_token] = @my_cookies[:auth_token]
+    @my_cookies.encrypted[:user] = @robert.id # auth as Robert
+    cookies[:user] = @my_cookies[:user]
 
     session[:impersonated_user_id] = @andrea.id
 
     delete :destroy
 
     @robert.reload
-    assert_equal 'RobertsAuthToken', @robert.auth_token
-    assert_equal 'RobertsAuthToken', cookies.encrypted[:auth_token]
+    assert_equal @robert.id, @robert.id
+    assert_equal @robert.id, cookies.encrypted[:user]
   end
 end
