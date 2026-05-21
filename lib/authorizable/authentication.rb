@@ -13,7 +13,7 @@ module Authorizable
       helper_method :current_user, :admin_route?
       # hide_action :current_user, :admin_route?, :redirect_to_sign_in, :after_sign_in
 
-      rescue_from Authorizable::UnathorizedAccessError, with: :redirect_to_sign_in
+      rescue_from Authorizable::UnauthorizedAccessError, with: :redirect_to_sign_in
 
       protect_namespaces :admin
     end
@@ -79,11 +79,7 @@ module Authorizable
     end
 
     def require_authentication
-      unathorized! unless authorized?
-    end
-
-    def unathorized!
-      raise UnathorizedAccessError
+      raise Authorizable::UnauthorizedAccessError unless authorized?
     end
 
     def authorized?
