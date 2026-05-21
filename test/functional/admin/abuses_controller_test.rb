@@ -2,12 +2,12 @@ require 'test_helper'
 
 class Admin::AbusesControllerTest < ActionController::TestCase
   set_fixture_class abuses: Authorizable::Abuse
-  fixtures :abuses
+  fixtures :abuses, :users
 
   def setup
     @my_cookies = ActionDispatch::Request.new(Rails.application.env_config.deep_dup).cookie_jar
-    @my_cookies.encrypted[:auth_token] = 'RobertsAuthToken'
-    cookies[:auth_token] = @my_cookies[:auth_token]
+    @my_cookies.encrypted[:user] = users(:robert).id
+    cookies[:user] = @my_cookies[:user]
     super
   end
 

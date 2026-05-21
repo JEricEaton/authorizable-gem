@@ -6,8 +6,8 @@ class ProtectedNamespacesTest < ActionDispatch::IntegrationTest
   def setup
     @andrea = users(:andrea) #non-admin
     @my_cookies = ActionDispatch::Request.new(Rails.application.env_config.deep_dup).cookie_jar
-    @my_cookies.encrypted[:auth_token] = @andrea.auth_token
-    cookies[:auth_token] = @my_cookies[:auth_token]
+    @my_cookies.encrypted[:user] = @andrea.id
+    cookies[:user] = @my_cookies[:user]
   end
 
   def teardown
