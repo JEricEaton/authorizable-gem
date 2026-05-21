@@ -26,10 +26,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_02_17_155514) do
     t.string "last_name"
     t.string "email"
     t.string "password_digest"
-    t.string "password_salt"
-    t.string "auth_token"
-    t.string "reset_password_token"
-    t.datetime "password_reset_sent_at", precision: nil
+    t.string "password_reset_token"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.string "role"
